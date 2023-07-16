@@ -1,3 +1,3 @@
 # C++ only
 
-All Files dont use third party libs
+All files dont use third party libs
