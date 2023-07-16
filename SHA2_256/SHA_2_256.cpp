@@ -118,7 +118,7 @@ std::string sha256(const std::string& input_string) {
 }
 
 int main() {
-  std::string input_string = "HOMER SIMPSONS";
+  std::string input_string = "HOMER SIMPSON";
   std::string hashed_string = sha256(input_string);
   std::cout << hashed_string << std::endl;
   return 0;
