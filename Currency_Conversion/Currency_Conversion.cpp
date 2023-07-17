@@ -36,7 +36,7 @@ int main() {
     possibleConversions += pair.first;
   }
 
-  std::cout << possibleConversions << std::endl;
+  std::cout << possibleConversions << "\n" << std::endl;
 
   std::cout << "Amount > Currency IN > Currency OUT" << std::endl;
 
