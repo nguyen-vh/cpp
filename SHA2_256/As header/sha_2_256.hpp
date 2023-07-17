@@ -4,7 +4,6 @@
 #ifndef SHA_2_256_HPP
 #define SHA_2_256_HPP
 
-#include <cstdint>
 #include <cstring>
 #include <iomanip>
 #include <sstream>
@@ -33,7 +32,7 @@ constexpr uint32_t K[64] = {
     0x90befffa, 0xa4506ceb, 0xbef9a3f7, 0xc67178f2};
 
 // SHA-256 Message Schedule (Wt represents the expanded message schedule)
-void prepare_schedule(const uint8_t* data, uint32_t* Wt) {
+inline void prepare_schedule(const uint8_t* data, uint32_t* Wt) {
   for (int t = 0; t < 16; ++t) {
     Wt[t] = static_cast<uint32_t>(data[t * 4]) << 24;
     Wt[t] |= static_cast<uint32_t>(data[t * 4 + 1]) << 16;
@@ -51,7 +50,7 @@ void prepare_schedule(const uint8_t* data, uint32_t* Wt) {
 }
 
 // SHA-256 Hashing Function
-std::string sha256(const std::string& input_string) {
+inline std::string sha256(const std::string& input_string) {
   uint32_t H[8] = {0x6a09e667, 0xbb67ae85, 0x3c6ef372, 0xa54ff53a,
                    0x510e527f, 0x9b05688c, 0x1f83d9ab, 0x5be0cd19};
 
