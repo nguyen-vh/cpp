@@ -4,7 +4,7 @@
 
 std::unordered_map<std::string, double> currencyER;
 
-double convertion(const double& amount, const std::string& currencyIN,
+double conversion(const double& amount, const std::string& currencyIN,
                   const std::string& currencyOUT) {
   return (amount * (currencyER[currencyIN]) / (currencyER[currencyOUT]));
 }
@@ -44,6 +44,6 @@ int main() {
 
   std::cout << amount << " " << currencyIN << " converts to " << std::fixed
             << std::setprecision(2)
-            << convertion(amount, currencyIN, currencyOUT) << " " << currencyOUT
+            << conversion(amount, currencyIN, currencyOUT) << " " << currencyOUT
             << std::endl;
 }
