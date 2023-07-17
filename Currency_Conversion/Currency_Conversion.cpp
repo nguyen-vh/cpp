@@ -10,6 +10,8 @@ double convertion(const double& amount, const std::string& currencyIN,
 }
 
 int main() {
+  // Add more by looking for 1000000 (Currency adding) converted to USD
+  // ex. 1000000 EUR -> 1121675.00 USD
   currencyER["USD"] = 1000000;
   currencyER["EUR"] = 1121675.00;
   currencyER["CNY"] = 139363.10;
