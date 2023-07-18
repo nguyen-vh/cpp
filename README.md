@@ -1,6 +1,6 @@
 # C++20 and upwards
 
-All files dont use third party libs
-=> copy and paste and they will work
-
-All compiled and tested with gcc
+All files do not use third party libraries.
+All cpp files compiled and tested with gcc.
+No tests for hpp (header) files.
+All cpp files should be able to run independently.
