@@ -82,11 +82,24 @@ bool check_member() {
 template <typename T>
 bool check_class() {
   if /*constexpr*/ (sizeof(T) > 0) {
-    std::string str{typeid(T).name()};
-    // Hardcode demangler for typeid - Doenst do it perfectly but I cant use
-    // #include a demangler header file because my compiler cant find those
-    str.erase(0, 10).pop_back();
-    std::cout << "Found Class " << str << std::endl;
+    std::string strClass = typeid(T).name();
+
+    //  Hardcode demangler for typeid
+
+    // The Mangled code is N7STUDENT6ClassXE. N = namespace, 7 = number of
+    // character of namespace, 6 = number of character of class and E at the end
+    // as end of character stop. I know search for the last number and delete
+    // everything in front including the number and delete the E. This should be
+    // a very reliable way to demangle the class for this program.
+    size_t lastIntegerPos = strClass.size();
+    while (lastIntegerPos > 0 && !std::isdigit(strClass[lastIntegerPos - 1])) {
+      lastIntegerPos--;
+    }
+
+    std::string strClassReadable{strClass.substr(lastIntegerPos)};
+    strClassReadable.pop_back();
+
+    std::cout << "Found Class " << strClassReadable << std::endl;
     return true;
   } else {
     // Should never output here! Reason above
