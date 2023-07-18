@@ -86,11 +86,12 @@ bool check_class() {
 
     //  Hardcode demangler for typeid
 
-    // The Mangled code is N7STUDENT6ClassXE. N = namespace, 7 = number of
+    // The mangled code is N7STUDENT6ClassXE. N = namespace, 7 = number of
     // character of namespace, 6 = number of character of class and E at the end
-    // as end of character stop. I know search for the last number and delete
-    // everything in front including the number and delete the E. This should be
-    // a very reliable way to demangle the class for this program.
+    // as end of character stop. I now search for the last number and delete
+    // everything in front including the number and delete the E at the end.
+    // This should be a very reliable way to demangle the class for this
+    // program.
     size_t lastIntegerPos = strClass.size();
     while (lastIntegerPos > 0 && !std::isdigit(strClass[lastIntegerPos - 1])) {
       lastIntegerPos--;
