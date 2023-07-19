@@ -94,7 +94,7 @@ bool check_output(T&& main_call, const std::string& expectedOutput) {
   std::stringstream output_stream;
   std::streambuf* old_buffer = std::cout.rdbuf(output_stream.rdbuf());
 
-  std::forward<T>(main_call)();  // calls main() in namespace STUDENT
+  (main_call)();  // calls main() in namespace STUDENT
 
   std::cout.rdbuf(old_buffer);
 
@@ -159,7 +159,8 @@ bool check_member() {
 // place to be called the compiler will complain naturally
 template <typename T>
 bool check_class() {
-  if /*constexpr*/ (sizeof(T) > 0) {
+  auto placeholder = sizeof(T);
+  if /*constexpr*/ (placeholder > 0) {
     std::string strClass = typeid(T).name();
 
     //  Hardcode demangler for typeid
@@ -227,7 +228,7 @@ void testStudentCodeMAIN(const std::string& expectedOutput,
                          const bool& foundClass3, const bool& foundClass4,
                          const bool& foundClass5) {
   if (foundClass1 && foundClass2 && foundClass3) {
-    if (check_output([]() { STUDENT::main(); }, expectedOutput)) {
+    if (check_output(*(STUDENT::main), expectedOutput)) {
       std::cout << "- - Great Job! - -\n" << std::endl;
     } else {
       std::cout << "Try Again!\n" << std::endl;
