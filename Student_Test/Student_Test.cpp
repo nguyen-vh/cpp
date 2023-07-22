@@ -5,75 +5,6 @@
 #include <string>
 
 
-//! Macros
-
-//* Macros for SFINAE check of Members inside of a Class 
-
-
-#define C_HAS_1_MEMBER( STRUCT_N, MEMBER_N1 ) \
-template <typename T, typename = void> \
-struct STRUCT_N : std::false_type {}; \
-\
-template <typename T> \
-struct STRUCT_N<T , decltype( void( std::declval<T>( ).MEMBER_N1 ) )> : std::true_type {};
-
-#define C_HAS_2_MEMBERS( STRUCT_N, MEMBER_N1, MEMBER_N2 ) \
-template <typename T, typename = void> \
-struct STRUCT_N : std::false_type {}; \
-\
-template <typename T> \
-struct STRUCT_N<T , std::void_t<decltype( std::declval<T>( ).MEMBER_N1 ) ,decltype( std::declval<T>( ).MEMBER_N2 )>>: std::true_type {};
-
-#define C_HAS_3_MEMBERS( STRUCT_N, MEMBER_N1, MEMBER_N2, MEMBER_N3 ) \
-template <typename T, typename = void> \
-struct STRUCT_N : std::false_type {}; \
-\
-template <typename T> \
-struct STRUCT_N<T , std::void_t<decltype( std::declval<T>( ).MEMBER_N1 ), decltype( std::declval<T>( ).MEMBER_N2 ), decltype( std::declval<T>( ).MEMBER_N3 )>>: std::true_type {};
-
-
-//* Macros for Output of CREATE_HAS_MEMBER
-
-
-#define C_CHECK_MEMBER( NAME, STRUCT_N ) \
-template <typename T> \
-bool NAME( ) { \
- if (STRUCT_N<T>::value) { \
-        std::cout << "+ Found its Member" << std::endl; \
-        true;} else { \
-        std::cout << "+ Member not found" << std::endl; \
-        false;} } \
-
-
-#define C_CHECK_MEMBERS( NAME, STRUCT_N ) \
-template <typename T> \
-bool NAME( ) { \
- if (STRUCT_N<T>::value) { \
-        std::cout << "+ Found its Members" << std::endl; \
-        true;} else { \
-        std::cout << "+ Members not found" << std::endl; \
-        false;} } \
-
-
-//* Macro for Dummy Class
-
-
-#define C_DUMMY_CLASS( CLASS_N ) \
-namespace TASK::TESTER{ using CLASS_N = No; } \
-
-
-//* Macro for t_Check Call
-
-
-#define C_CHECK( NAME, CHECK_MEMBER ) \
-template <typename T> \
-bool NAME( ) { \
-    if ( check_class<T>( ) && CHECK_MEMBER<T>( ) ) \
-        { return true; } else { return false; }} \
-
-//=// End of Macros 
-
-
 //! STUDENT Code
 
 
@@ -116,6 +47,74 @@ namespace STUDENT {
     }
 
 //=// End of STUDENT Code
+
+
+//! Macros
+
+//* Macros for SFINAE check of Members inside of a Class 
+
+
+#define C_HAS_1_MEMBER( STRUCT_N, MEMBER_N1 ) \
+template <typename T, typename = void> \
+struct STRUCT_N : std::false_type {}; \
+\
+template <typename T> \
+struct STRUCT_N<T , decltype( void( std::declval<T>( ).MEMBER_N1 ) )> : std::true_type {};
+
+#define C_HAS_2_MEMBERS( STRUCT_N, MEMBER_N1, MEMBER_N2 ) \
+template <typename T, typename = void> \
+struct STRUCT_N : std::false_type {}; \
+\
+template <typename T> \
+struct STRUCT_N<T , std::void_t<decltype( std::declval<T>( ).MEMBER_N1 ) ,decltype( std::declval<T>( ).MEMBER_N2 )>>: std::true_type {};
+
+#define C_HAS_3_MEMBERS( STRUCT_N, MEMBER_N1, MEMBER_N2, MEMBER_N3 ) \
+template <typename T, typename = void> \
+struct STRUCT_N : std::false_type {}; \
+\
+template <typename T> \
+struct STRUCT_N<T , std::void_t<decltype( std::declval<T>( ).MEMBER_N1 ), decltype( std::declval<T>( ).MEMBER_N2 ), decltype( std::declval<T>( ).MEMBER_N3 )>>: std::true_type {};
+
+
+//* Macros for Output of CREATE_HAS_MEMBER
+
+
+#define C_CHECK_MEMBER( NAME, STRUCT_N ) \
+template <typename T> \
+bool NAME( ) { \
+ if (STRUCT_N<T>::value) { \
+        std::cout << "+ Found its Member" << std::endl; \
+        return true;} else { \
+        std::cout << "- Member not found" << std::endl; \
+        return false;} } \
+
+
+#define C_CHECK_MEMBERS( NAME, STRUCT_N ) \
+template <typename T> \
+bool NAME( ) { \
+ if (STRUCT_N<T>::value) { \
+        std::cout << "+ Found its Members" << std::endl; \
+        return true;} else { \
+        std::cout << "- Members not found" << std::endl; \
+        return false;} } \
+
+
+//* Macro for Dummy Class
+
+
+#define C_DUMMY_CLASS( CLASS_N ) \
+namespace TASK::TESTER{ using CLASS_N = No; } \
+
+
+//* Macro for t_Check Call
+
+
+#define C_CHECK( NAME, CHECK_MEMBER ) \
+template <typename T> \
+bool NAME( ) { \
+    return ( check_class<T>( ) && CHECK_MEMBER<T>( ) );} \
+
+//=// End of Macros
 
 
 //! Dummy Classes
@@ -206,11 +205,11 @@ bool check_class( ) {
         std::string strClassReadable { strClass.substr( lastIntegerPos ) };
         strClassReadable.pop_back( );
 
-        std::cout << strClassReadable << " Found" << std::endl;
+        std::cout << "+ " << strClassReadable << " found" << std::endl;
         return true;
         }
     else {
-        std::cout << "Class in Assignment not found. " << std::endl;
+        std::cout << "- Class in Assignment not found. " << std::endl;
         return false;
         }
     }
@@ -236,7 +235,6 @@ C_CHECK( t_check_MyClassZ , check_Members_MyClassZ )
 //* Final Output
 
 
-template <typename = void>
 void execute2( const std::string& expectedOutput ,
                          const bool& fClass1 , const bool& fClass2 ,
                          const bool& fClass3 , const bool& fClass4 ,
@@ -248,7 +246,7 @@ void execute2( const std::string& expectedOutput ,
         else { std::cout << "Try Again!\n" << std::endl; }
         }
     else {
-        std::cout << "You forgot the member inside the class/struct!\n" << std::endl;
+        std::cout << "You forgot the Member inside the Class/Struct!\n" << std::endl;
         std::cout << "Try Again!\n" << std::endl;
         }
     }
@@ -270,7 +268,7 @@ namespace STUDENT::TASK {
         // Always end with "\n"
         std::string expectedOutput = "Printed...\n";
 
-        ::execute2<>( expectedOutput , fClass1 , fClass2 , fClass3 , fClass4 , fClass5 );
+        ::execute2( expectedOutput , fClass1 , fClass2 , fClass3 , fClass4 , fClass5 );
 
         }
     }
