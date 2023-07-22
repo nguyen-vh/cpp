@@ -68,7 +68,7 @@ bool check_class( ) { \
         std::cout << "-  > Members not found" << std::endl; \
         return false; }} 
 
-#define C_MAIN_3() \
+#define C_MAIN( ExpectedOutput , check_Classname1 , check_Classname2 , check_Classname3 , check_Classname4 , check_Classname5 ) \
 void evaluation( const std::string& expectedOutput ,const bool& Bt1 , const bool& Bt2 , \
     const bool& Bt3 , const bool& Bt4 , const bool& Bt5 ) { \
     if ( Bt1 && Bt2 && Bt3 && Bt4 && Bt5 ) { \
@@ -76,17 +76,13 @@ void evaluation( const std::string& expectedOutput ,const bool& Bt1 , const bool
             std::cout << std::endl; \
             std::cout << "+ + Student did great Job! + +\n" << std::endl; }} \
     else { std::cout << std::endl; \
-        std::cout << "- Student forgot a Member inside a Class!\n" << std::endl; }} 
-
-#define C_MAIN_2( ExpectedOutput , check_Classname1 , check_Classname2 , check_Classname3 , check_Classname4 , check_Classname5 ) \
+        std::cout << "- Student forgot a Member inside a Class!\n" << std::endl; }} \
 namespace STUDENT::TASK { using namespace ::TASK::TESTER; \
 void testing( ) { \
         bool Bt1 = check_Classname1; bool Bt2 = check_Classname2; bool Bt3 = check_Classname3; \
         bool Bt4 = check_Classname4; bool Bt5 = check_Classname5; \
         std::string expectedOutput = ExpectedOutput; \
-        ::evaluation( expectedOutput , Bt1 , Bt2 , Bt3 , Bt4 , Bt5 ); }} 
-
-#define C_MAIN_1() \
+        ::evaluation( expectedOutput , Bt1 , Bt2 , Bt3 , Bt4 , Bt5 ); }} \
 int main( ) { STUDENT::TASK::testing( ); return 0; }
 
 //! STUDENT Code
@@ -136,4 +132,4 @@ C_CHECK( MyClassX , checks_MyClassX )
 C_CHECK( MyClassY , checks_MyClassY )
 C_CHECK( MyClassZ , checks_MyClassZ )
 //! Mains
-C_MAIN_3( ) C_MAIN_2( "Printed...\n" , check_MyClassX<MyClassX>( ) , check_MyClassY<MyClassY>( ) , check_MyClassZ<MyClassZ>( ) , true , true ) C_MAIN_1( )
+C_MAIN( "Printed...\n" , check_MyClassX<MyClassX>( ) , check_MyClassY<MyClassY>( ) , check_MyClassZ<MyClassZ>( ) , true , true )
