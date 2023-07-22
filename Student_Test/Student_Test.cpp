@@ -22,13 +22,13 @@ namespace STUDENT {
         public:
         void printed( ) { cout << "Printed..." << endl; }
         };
-    /*
+
     class MyClassY {
         public:
         int printed;
-        int IDE;
+        int IDE( ) { return 0; };
         };
-    */
+
     class MyClassZ {
         public:
         void OHM( ) {};
@@ -86,9 +86,9 @@ decltype( std::declval<T>( ).MEMBER_N2 ), decltype( std::declval<T>( ).MEMBER_N3
 template <typename T> \
 bool NAME( ) { \
  if (STRUCT_N<T>::value) { \
-        std::cout << "+ Found its Member" << std::endl; \
+        std::cout << "+  > Found its Member" << std::endl; \
         return true;} else { \
-        std::cout << "- Member not found" << std::endl; \
+        std::cout << "-  > Member not found" << std::endl; \
         return false;} } \
 
 
@@ -96,9 +96,9 @@ bool NAME( ) { \
 template <typename T> \
 bool NAME( ) { \
  if (STRUCT_N<T>::value) { \
-        std::cout << "+ Found its Members" << std::endl; \
+        std::cout << "+  > Found its Members" << std::endl; \
         return true;} else { \
-        std::cout << "- Members not found" << std::endl; \
+        std::cout << "-  > Members not found" << std::endl; \
         return false;} } \
 
 
@@ -139,7 +139,7 @@ C_DUMMY_CLASS( MyClassZ )
 
 C_HAS_1_MEMBER( checks_for_ClassX , printed( ) )
 
-C_HAS_2_MEMBERS( checks_for_MyClassY , printed , IDE )
+C_HAS_2_MEMBERS( checks_for_MyClassY , printed , IDE( ) )
 
 C_HAS_3_MEMBERS( checks_for_MyClassZ , OHM( ) , AMP , VOLT )
 
@@ -165,12 +165,11 @@ bool check_output( T&& main_call , const std::string& expectedOutput ) {
     std::string STUDENTOutput = output_stream.str( );
 
     if ( STUDENTOutput == expectedOutput ) {
-        std::cout << "Student Output matches the expected output." << std::endl;
-        std::cout << "Task completed.\n" << std::endl;
+        std::cout << "+ Student Output correct" << std::endl;
         return true;
         }
     else {
-        std::cout << "\nStudent Output does not match the expected output."
+        std::cout << "- Student Output incorrect"
             << std::endl;
         std::cout << "- Expected Output: " << expectedOutput << std::endl;
         std::cout << "-  Student Output: " << STUDENTOutput << std::endl;
@@ -218,6 +217,7 @@ bool check_class( ) {
         }
     else {
         std::cout << "- Class in Assignment not found. " << std::endl;
+        std::cout << "-  > Members not found" << std::endl;
         return false;
         }
     }
@@ -249,13 +249,13 @@ void execute2( const std::string& expectedOutput ,
                          const bool& fClass5 ) {
     if ( fClass1 && fClass2 && fClass3 && fClass4 && fClass5 ) {
         if ( check_output( *( STUDENT::main ) , expectedOutput ) ) {
-            std::cout << "- - Great Job! - -\n" << std::endl;
+            std::cout << std::endl;
+            std::cout << "+ + Student did great Job! + +\n" << std::endl;
             }
-        else { std::cout << "Try Again!\n" << std::endl; }
         }
     else {
-        std::cout << "You forgot the Member inside the Class/Struct!\n" << std::endl;
-        std::cout << "Try Again!\n" << std::endl;
+        std::cout << std::endl;
+        std::cout << "- Student forgot a Member inside a Class!\n" << std::endl;
         }
     }
 
@@ -292,3 +292,22 @@ int main( ) {
     }
 
 //=// End of Main Execution of the Program
+
+//===// End of Program
+
+/*
+*   Summary of what is needed for a membercheck inside a class
+*
+*   1.  Create a Dummy Class with C_DUMMY_CLASS() and the name of the assignment class
+*   2.1 Create a C_HAS_MEMBERS with as many Members you want the class need to have
+*   2.2 e.x. C_HAS_2_MEMBERS( checks_for_MyClassY , printed , IDE() ) Templatename is now checks_for MyClassY
+*       and we are checking for Variable printed and Function IDE()
+*   3.  Create C_CHECK_MEMBERS() with a name and the Templatename from 2.
+*   4.  Create a C_CHECK() which needs a name and the Templatename from 3.
+*   5.  In Class-Call(line 263) insert the Templatecall from 4. and call with the class you want to check
+*   6.  Insert the Output you want to have and end with \n in expectedOutput
+*
+*   Notes:  -Only Classes inside of namespace STUDENT will be tested
+*           -Output can only be checked if there is an output call in namespace STUDENT
+*
+*/
