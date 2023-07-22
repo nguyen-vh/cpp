@@ -3,7 +3,7 @@
 #include <iostream>
 #include <sstream>
 // Headers which might needed to be included: 
-// <string>, <cctype>, <typeinfo>, <type_traits>
+// <string>, <cctype>, <typeinfo>, <type_traits>, <utility>
 
 
 //! STUDENT Code
@@ -14,7 +14,7 @@ namespace STUDENT {
 //* Students code starts here . . .
 
 
-    //#include <iostream>   // Have to comment out cos formatter doing weird formatting 
+    //#include <iostream>   // Commented out because formatter doing weird formatting 
 
     using namespace std;
 
@@ -36,6 +36,8 @@ namespace STUDENT {
         float VOLT;
         };
 
+    void SomeFunctionX( ) {}
+
     int main( ) {
         MyClassX x;
         x.printed( );
@@ -52,7 +54,7 @@ namespace STUDENT {
 
 //! Macros
 
-//* Macros for SFINAE check of Members inside of a Class 
+//* SFINAE check of Members inside of a Class 
 // @param STRUCT_N Templatename @param MEMBER_N Membername
 
 #define C_HAS_1_MEMBER( STRUCT_N, MEMBER_N1 ) \
@@ -76,10 +78,10 @@ struct STRUCT_N : std::false_type {}; \
 \
 template <typename T> \
 struct STRUCT_N<T , std::void_t<decltype( std::declval<T>( ).MEMBER_N1 ), \
-decltype( std::declval<T>( ).MEMBER_N2 ), decltype( std::declval<T>( ).MEMBER_N3 )>>: std::true_type {}; \
+decltype( std::declval<T>( ).MEMBER_N2 ), decltype( std::declval<T>( ).MEMBER_N3 )>>: std::true_type {}; 
 
 
-//* Macros for Output of C_HAS_MEMBER
+//* Output of C_HAS_MEMBER
 // @param NAME Funktionname @param STRUCT_N Name of Template to call
 
 #define C_CHECK_MEMBER( NAME, STRUCT_N ) \
@@ -89,7 +91,7 @@ bool NAME( ) { \
         std::cout << "+  > Found its Member" << std::endl; \
         return true;} else { \
         std::cout << "-  > Member not found" << std::endl; \
-        return false;} } \
+        return false;} } 
 
 
 #define C_CHECK_MEMBERS( NAME, STRUCT_N ) \
@@ -99,23 +101,24 @@ bool NAME( ) { \
         std::cout << "+  > Found its Members" << std::endl; \
         return true;} else { \
         std::cout << "-  > Members not found" << std::endl; \
-        return false;} } \
+        return false;} } 
 
 
-//* Macro for Dummy Class
+//* Dummy Class
 // @param CLASS_N Classname in Assignment
 
 #define C_DUMMY_CLASS( CLASS_N ) \
-namespace TASK::TESTER{ using CLASS_N = No; } \
+namespace TASK::TESTER{ using CLASS_N = No; } 
 
 
-//* Macro for t_Check Call
+//* T_Check Call
 // @param NAME Functionname @param CHECK_MEMBER Name of C_CHECK_MEMBER
 
-#define C_CHECK( NAME, CHECK_MEMBER ) \
+#define C_T_CHECK( NAME, CHECK_MEMBER ) \
 template <typename T> \
 bool NAME( ) { \
-    return ( check_class<T>( ) && CHECK_MEMBER<T>( ) );} \
+    return ( check_class<T>( ) && CHECK_MEMBER<T>( ) );} 
+
 
 //=// End of Macros
 
@@ -228,11 +231,11 @@ bool check_class( ) {
 //! Check Class + Members
 
 
-C_CHECK( t_check_MyClassX , check_Member_MyClassX )
+C_T_CHECK( t_check_MyClassX , check_Member_MyClassX )
 
-C_CHECK( t_check_MyClassY , check_Members_MyClassY )
+C_T_CHECK( t_check_MyClassY , check_Members_MyClassY )
 
-C_CHECK( t_check_MyClassZ , check_Members_MyClassZ )
+C_T_CHECK( t_check_MyClassZ , check_Members_MyClassZ )
 
 //=// End of Check Class + Members
 
@@ -244,10 +247,10 @@ C_CHECK( t_check_MyClassZ , check_Members_MyClassZ )
 //? If all conditions are true the task has been solved successfully
 
 void execute2( const std::string& expectedOutput ,
-                         const bool& fClass1 , const bool& fClass2 ,
-                         const bool& fClass3 , const bool& fClass4 ,
-                         const bool& fClass5 ) {
-    if ( fClass1 && fClass2 && fClass3 && fClass4 && fClass5 ) {
+                         const bool& Bt1 , const bool& Bt2 ,
+                         const bool& Bt3 , const bool& Bt4 ,
+                         const bool& Bt5 ) {
+    if ( Bt1 && Bt2 && Bt3 && Bt4 && Bt5 ) {
         if ( check_output( *( STUDENT::main ) , expectedOutput ) ) {
             std::cout << std::endl;
             std::cout << "+ + Student did great Job! + +\n" << std::endl;
@@ -268,18 +271,19 @@ namespace STUDENT::TASK {
     void execute( ) {
 
         // Fill unused ones with true
-        bool fClass1 = t_check_MyClassX<MyClassX>( );
-        bool fClass2 = t_check_MyClassY<MyClassY>( );
-        bool fClass3 = t_check_MyClassZ<MyClassZ>( );
-        bool fClass4 = true;
-        bool fClass5 = true;
+        bool Bt1 = t_check_MyClassX<MyClassX>( );
+        bool Bt2 = t_check_MyClassY<MyClassY>( );
+        bool Bt3 = t_check_MyClassZ<MyClassZ>( );
+        bool Bt4 = true;
+        bool Bt5 = true;
 
         // Always end with "\n"
         std::string expectedOutput = "Printed...\n";
 
 
-        ::execute2( expectedOutput , fClass1 , fClass2 , fClass3 , fClass4 , fClass5 );
+        ::execute2( expectedOutput , Bt1 , Bt2 , Bt3 , Bt4 , Bt5 );
         }
+
     }
 
 
