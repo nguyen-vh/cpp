@@ -45,3 +45,8 @@ namespace STUDENT {
         C_CHECK( MyClassY , checks_MyClassY )
         C_CHECK( MyClassZ , checks_MyClassZ )
         C_MAIN( "Printed...\n" , check_MyClassX<MyClassX>( ) , check_MyClassY<MyClassY>( ) , check_MyClassZ<MyClassZ>( ) , true , true )
+/*  Steps to check for a Member inside of a Class:
+    1. Create C_HAS_X_MEMBER() with a Name and the Members you want to check
+    2. Create C_CHECK() with the Classname you want to check in and the Name from 1.
+    3. Only 1 C_Main with Expected Output, then "check_Classname<Classname>()" 5 times but if less then fill with "true"
+*/
