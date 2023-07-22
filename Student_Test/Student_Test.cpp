@@ -52,7 +52,7 @@ namespace STUDENT {
 //! Macros
 
 //* Macros for SFINAE check of Members inside of a Class 
-
+// @param STRUCT_N Templatename @param MEMBER_N Membername
 
 #define C_HAS_1_MEMBER( STRUCT_N, MEMBER_N1 ) \
 template <typename T, typename = void> \
@@ -76,8 +76,8 @@ template <typename T> \
 struct STRUCT_N<T , std::void_t<decltype( std::declval<T>( ).MEMBER_N1 ), decltype( std::declval<T>( ).MEMBER_N2 ), decltype( std::declval<T>( ).MEMBER_N3 )>>: std::true_type {};
 
 
-//* Macros for Output of CREATE_HAS_MEMBER
-
+//* Macros for Output of C_HAS_MEMBER
+// @param NAME Funktionname @param STRUCT_N Name of Template to call
 
 #define C_CHECK_MEMBER( NAME, STRUCT_N ) \
 template <typename T> \
@@ -100,14 +100,14 @@ bool NAME( ) { \
 
 
 //* Macro for Dummy Class
-
+// @param CLASS_N Classname in Assignment
 
 #define C_DUMMY_CLASS( CLASS_N ) \
 namespace TASK::TESTER{ using CLASS_N = No; } \
 
 
 //* Macro for t_Check Call
-
+// @param NAME Functionname @param CHECK_MEMBER Name of C_CHECK_MEMBER
 
 #define C_CHECK( NAME, CHECK_MEMBER ) \
 template <typename T> \
@@ -144,18 +144,20 @@ C_HAS_3_MEMBERS( checks_for_MyClassZ , OHM( ) , AMP , VOLT )
 
 
 //! STUDENT::main Output-Handling
-
-
-//? Buffs the cout output of STUDENT::main
+// @param main_call Executes the program inside namespace STUDENT
+// @param expectedOutput Text which needs to match
+// @param output_stream Temporary buffer for all std::cout
+// @param std_buffer Normal buffer
+//? Buffs the std::cout output and compares
 
 template <typename T>
-bool check_output( T&& student_main_call , const std::string& expectedOutput ) {
+bool check_output( T&& main_call , const std::string& expectedOutput ) {
     std::stringstream output_stream;
-    std::streambuf* old_buffer = std::cout.rdbuf( output_stream.rdbuf( ) );
+    std::streambuf* std_buffer = std::cout.rdbuf( output_stream.rdbuf( ) );
 
-    ( student_main_call )( );
+    ( main_call )( );
 
-    std::cout.rdbuf( old_buffer );
+    std::cout.rdbuf( std_buffer );
 
     std::string STUDENTOutput = output_stream.str( );
 
@@ -189,7 +191,9 @@ C_CHECK_MEMBERS( check_Members_MyClassZ , checks_for_MyClassZ )
 
 
 //! Class-Handling
-
+// @param strClassReadable Only name of Class
+//? Checks if the Class in Assignment is in namespace STUDENT and demangles the Classname
+// TODO: Program a failproof demangler
 
 template <typename T>
 bool check_class( ) {
@@ -233,7 +237,7 @@ C_CHECK( t_check_MyClassZ , check_Members_MyClassZ )
 
 
 //* Final Output
-
+//? If all conditions are true the task has been solved successfully
 
 void execute2( const std::string& expectedOutput ,
                          const bool& fClass1 , const bool& fClass2 ,
@@ -253,7 +257,7 @@ void execute2( const std::string& expectedOutput ,
 
 
 //* Class-Call
-
+//? Input of the to test templates and text of expected Output
 
 namespace STUDENT::TASK {
     using namespace ::TASK::TESTER;
@@ -268,8 +272,8 @@ namespace STUDENT::TASK {
         // Always end with "\n"
         std::string expectedOutput = "Printed...\n";
 
-        ::execute2( expectedOutput , fClass1 , fClass2 , fClass3 , fClass4 , fClass5 );
 
+        ::execute2( expectedOutput , fClass1 , fClass2 , fClass3 , fClass4 , fClass5 );
         }
     }
 
