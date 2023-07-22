@@ -2,7 +2,7 @@
 
 #include <iostream>
 #include <sstream>
-#include <string>
+// Headers which might needed to be included: <strinng>, <cctype>, <typeinfo>, <type_traits>
 
 
 //! STUDENT Code
@@ -66,14 +66,16 @@ template <typename T, typename = void> \
 struct STRUCT_N : std::false_type {}; \
 \
 template <typename T> \
-struct STRUCT_N<T , std::void_t<decltype( std::declval<T>( ).MEMBER_N1 ) ,decltype( std::declval<T>( ).MEMBER_N2 )>>: std::true_type {};
+struct STRUCT_N<T , std::void_t<decltype( std::declval<T>( ).MEMBER_N1 ) , \
+decltype( std::declval<T>( ).MEMBER_N2 )>>: std::true_type {};
 
 #define C_HAS_3_MEMBERS( STRUCT_N, MEMBER_N1, MEMBER_N2, MEMBER_N3 ) \
 template <typename T, typename = void> \
 struct STRUCT_N : std::false_type {}; \
 \
 template <typename T> \
-struct STRUCT_N<T , std::void_t<decltype( std::declval<T>( ).MEMBER_N1 ), decltype( std::declval<T>( ).MEMBER_N2 ), decltype( std::declval<T>( ).MEMBER_N3 )>>: std::true_type {};
+struct STRUCT_N<T , std::void_t<decltype( std::declval<T>( ).MEMBER_N1 ), \
+decltype( std::declval<T>( ).MEMBER_N2 ), decltype( std::declval<T>( ).MEMBER_N3 )>>: std::true_type {}; \
 
 
 //* Macros for Output of C_HAS_MEMBER
@@ -193,23 +195,24 @@ C_CHECK_MEMBERS( check_Members_MyClassZ , checks_for_MyClassZ )
 //! Class-Handling
 // @param strClassReadable Only name of Class
 //? Checks if the Class in Assignment is in namespace STUDENT and demangles the Classname
-// TODO: Program a failproof demangler
 
 template <typename T>
 bool check_class( ) {
 
-    if ( !( std::is_same<T , TASK::TESTER::No>::value ) ) {
-        std::string strClass = typeid( T ).name( );
+    if ( !std::is_same<T , TASK::TESTER::No>::value ) {
+        std::string strClassN = typeid( T ).name( ) , strClassNreadable {};
+        strClassN = strClassN.erase( 0 , 9 );
 
-        size_t lastIntegerPos = strClass.size( );
-        while ( lastIntegerPos > 0 && !std::isdigit( strClass [ lastIntegerPos - 1 ] ) ) {
-            lastIntegerPos--;
+        for ( int i = 0; i < strClassN.length( ); ++i ) {
+            if ( std::isdigit( strClassN [ i ] ) ) {
+                if ( !std::isdigit( strClassN [ i + 1 ] ) ) {
+                    strClassNreadable = strClassN.substr( i + 1 );
+                    }
+                }
             }
+        strClassNreadable.pop_back( );
 
-        std::string strClassReadable { strClass.substr( lastIntegerPos ) };
-        strClassReadable.pop_back( );
-
-        std::cout << "+ " << strClassReadable << " found" << std::endl;
+        std::cout << "+ " << strClassNreadable << " found" << std::endl;
         return true;
         }
     else {
@@ -263,6 +266,7 @@ namespace STUDENT::TASK {
     using namespace ::TASK::TESTER;
     void execute( ) {
 
+        // Fill unused ones with true
         bool fClass1 = t_check_MyClassX<MyClassX>( );
         bool fClass2 = t_check_MyClassY<MyClassY>( );
         bool fClass3 = t_check_MyClassZ<MyClassZ>( );
