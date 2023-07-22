@@ -4,3 +4,4 @@ All files do not use third party libraries.
 All cpp files compiled and tested with gcc.
 No tests for hpp (header) files.
 All cpp files should be able to run independently.
+For best experience have "Better Comments" (VSCode) Extension by Aaron Bond.
