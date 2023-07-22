@@ -2,7 +2,8 @@
 
 #include <iostream>
 #include <sstream>
-// Headers which might needed to be included: <strinng>, <cctype>, <typeinfo>, <type_traits>
+// Headers which might needed to be included: 
+// <string>, <cctype>, <typeinfo>, <type_traits>
 
 
 //! STUDENT Code
