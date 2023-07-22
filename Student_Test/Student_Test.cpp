@@ -246,7 +246,7 @@ C_T_CHECK( t_check_MyClassZ , check_Members_MyClassZ )
 //* Final Output
 //? If all conditions are true the task has been solved successfully
 
-void execute2( const std::string& expectedOutput ,
+void evaluation( const std::string& expectedOutput ,
                          const bool& Bt1 , const bool& Bt2 ,
                          const bool& Bt3 , const bool& Bt4 ,
                          const bool& Bt5 ) {
@@ -268,7 +268,7 @@ void execute2( const std::string& expectedOutput ,
 
 namespace STUDENT::TASK {
     using namespace ::TASK::TESTER;
-    void execute( ) {
+    void testing( ) {
 
         // Fill unused ones with true
         bool Bt1 = t_check_MyClassX<MyClassX>( );
@@ -281,7 +281,7 @@ namespace STUDENT::TASK {
         std::string expectedOutput = "Printed...\n";
 
 
-        ::execute2( expectedOutput , Bt1 , Bt2 , Bt3 , Bt4 , Bt5 );
+        ::evaluation( expectedOutput , Bt1 , Bt2 , Bt3 , Bt4 , Bt5 );
         }
 
     }
@@ -291,7 +291,7 @@ namespace STUDENT::TASK {
 
 
 int main( ) {
-    STUDENT::TASK::execute( );
+    STUDENT::TASK::testing( );
     return 0;
     }
 
