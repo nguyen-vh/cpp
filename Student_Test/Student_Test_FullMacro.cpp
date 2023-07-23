@@ -66,9 +66,12 @@ bool check_class( ) { \
         return true; } else { \
         std::cout << "- Class in Assignment not found. " << std::endl; \
         std::cout << "-  > Members not found" << std::endl; \
-        return false; }} 
+        return false; }} \
+struct Filler{}; \
+template <typename T , typename = void> \
+struct check_Filler : std::true_type {};
 
-#define C_MAIN( ExpectedOutput , check_Classname1 , check_Classname2 , check_Classname3 , check_Classname4 , check_Classname5 ) \
+#define C_MAIN( ExpectedOutput , C1 , C2 , C3 , C4 , C5 ) \
 void evaluation( const std::string& expectedOutput ,const bool& Bt1 , const bool& Bt2 , \
     const bool& Bt3 , const bool& Bt4 , const bool& Bt5 ) { \
     if ( Bt1 && Bt2 && Bt3 && Bt4 && Bt5 ) { \
@@ -79,8 +82,8 @@ void evaluation( const std::string& expectedOutput ,const bool& Bt1 , const bool
         std::cout << "- Student forgot a Member inside a Class!\n" << std::endl; }} \
 namespace STUDENT::TASK { using namespace ::TASK::TESTER; \
 void testing( ) { \
-        bool Bt1 = check_Classname1; bool Bt2 = check_Classname2; bool Bt3 = check_Classname3; \
-        bool Bt4 = check_Classname4; bool Bt5 = check_Classname5; \
+        bool Bt1 = check_##C1<C1>(); bool Bt2 = check_##C2<C2>(); bool Bt3 = check_##C3<C3>(); \
+        bool Bt4 = check_##C4<C4>(); bool Bt5 = check_##C5<C5>(); \
         std::string expectedOutput = ExpectedOutput; \
         ::evaluation( expectedOutput , Bt1 , Bt2 , Bt3 , Bt4 , Bt5 ); }} \
 int main( ) { STUDENT::TASK::testing( ); return 0; }
@@ -132,4 +135,10 @@ C_CHECK( MyClassX , checks_MyClassX )
 C_CHECK( MyClassY , checks_MyClassY )
 C_CHECK( MyClassZ , checks_MyClassZ )
 //! Mains
-C_MAIN( "Printed...\n" , check_MyClassX<MyClassX>( ) , check_MyClassY<MyClassY>( ) , check_MyClassZ<MyClassZ>( ) , true , true )
+C_MAIN( "Printed...\n" , MyClassX , MyClassY , MyClassZ , Filler , Filler )
+
+/*  Steps to check for a Member inside of a Class:
+    1. Create C_HAS_X_MEMBER() with a Name and the Members you want to check
+    2. Create C_CHECK() with the Classname you want to check in and the Name from 1.
+    3. Only 1 C_Main with Expected Output, then Classnames 5 times but if less then fill with "Filler"
+*/
