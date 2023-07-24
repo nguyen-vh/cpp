@@ -114,8 +114,6 @@ namespace STUDENT {
         float VOLT;
         };
 
-    void SomeFunctionX( ) {}
-
     int main( ) {
         MyClassX x;
         x.printed( );
