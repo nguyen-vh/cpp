@@ -13,7 +13,7 @@ template <typename T> \
 struct NAME<T , std::void_t<decltype( std::declval<T>( ).MEMBER )>> : std::true_type {};
 
 
-//* Combines a Class with the Check for 1 Member
+//* Combines a Class with the Check of 1 Member
 #define M_CLASS_AND_MEMBER_1( CLASSNAME, NAME_FROM_HAS_MEMBER, MEMBER_STRING ) \
 namespace TASK::TESTER{ using CLASSNAME = No; } \
 template <typename T> \
@@ -34,7 +34,7 @@ bool check_##CLASSNAME() { \
     } 
 
 
-//* Combines a Class with the Check for 2 Members
+//* Combines a Class with the Check of 2 Members
 #define M_CLASS_AND_MEMBER_2( CLASSNAME, NAME_FROM_HAS_MEMBER, MEMBER_STRING, NAME_FROM_HAS_MEMBER_2, MEMBER_STRING_2 ) \
 namespace TASK::TESTER { using CLASSNAME = No; } \
 \
@@ -69,7 +69,7 @@ bool check_##CLASSNAME() { \
 }
 
 
-//* Combines a Class with the Check for 3 Members
+//* Combines a Class with the Check of 3 Members
 #define M_CLASS_AND_MEMBER_3( CLASSNAME, NAME_FROM_HAS_MEMBER, MEMBER_STRING, NAME_FROM_HAS_MEMBER_2, MEMBER_STRING_2, NAME_FROM_HAS_MEMBER_3, MEMBER_STRING_3 ) \
 namespace TASK::TESTER { using CLASSNAME = No; } \
 \
@@ -119,18 +119,17 @@ bool check_##CLASSNAME() { \
 #define M_CLASS_HANDLING() \
 template <typename T> \
 bool check_class( ) { \
-    if ( !std::is_same<T , TASK::TESTER::No>::value ) { \
-        std::string strClassN = typeid( T ).name( ) , strClassNreadable {}; \
+std::string strClassN = typeid( T ).name( ) , strClassNreadable {}; \
         strClassN = strClassN.erase( 0 , 9 ); \
         for ( int i = 0; i < strClassN.length( ); ++i ) { \
             if ( std::isdigit( strClassN [ i ] ) ) { \
                 if ( !std::isdigit( strClassN [ i + 1 ] ) ) { \
                     strClassNreadable = strClassN.substr( i + 1 ); } } } \
-        strClassNreadable.pop_back( ); \
+                    strClassNreadable.pop_back( ); \
+    if ( !std::is_same<T , TASK::TESTER::No>::value ) { \
         std::cout << "+ Class '" << strClassNreadable << "' found" << std::endl; \
         return true; } else { \
         std::cout << "- Class in Assignment not found. " << std::endl; \
-        std::cout << "-  > Members not found" << std::endl; \
         return false; }} \
 \
 struct Filler {}; \
@@ -152,12 +151,13 @@ bool check_output( T&& main_call , const std::string& expectedOutput ) { \
     std::cout.rdbuf( std_buffer ); \
     std::string STUDENTOutput = output_stream.str( ); \
     if ( STUDENTOutput == expectedOutput ) { \
-        std::cout << "+ Student Output correct" << std::endl; \
+        std::cout << "\n+ Student Output correct" << std::endl; \
         return true; } else { \
-        std::cout << "- Student Output incorrect" << std::endl; \
-        std::cout << "- Expected Output: " << expectedOutput << std::endl; \
-        std::cout << "-  Student Output: " << STUDENTOutput << std::endl; \
-        return false; }} 
+        std::cout << "\n- Student Output incorrect" << std::endl; \
+        std::cout << "   > Expected Output: " << expectedOutput   \
+         << "   >  Student Output: " << STUDENTOutput << std::endl; \
+        return false; }} \
+namespace TASK::TESTER { struct No {}; }
 
 
 //* Check for Free Function
@@ -184,10 +184,10 @@ template <typename = void> \
 bool check_free_function_##FUNCTION_NAME( ) { \
 bool has_free_function_##FUNCTION_NAME = is_free_function##FUNCTION_NAME<decltype( FUNCTION_NAME )>::value; \
 if (has_free_function_##FUNCTION_NAME){ \
-std::cout << "+ Free Function '" << #FUNCTION_NAME << "' found\n" << std::endl; \
+std::cout << "+ Free Function '" << #FUNCTION_NAME << "' found" << std::endl; \
     } \
 else { \
-    std::cout << "- Free Function '" << #FUNCTION_NAME << "' not found\n" << std::endl; \
+    std::cout << "- Free Function '" << #FUNCTION_NAME << "' not found" << std::endl; \
     } \
     return ( has_free_function_##FUNCTION_NAME ); } } 
 
@@ -216,10 +216,10 @@ template <typename = void> \
 bool check_free_variable_##VARIABLE_NAME( ) { \
 bool has_free_variable_##VARIABLE_NAME = is_free_variable##VARIABLE_NAME<decltype( VARIABLE_NAME )>::value; \
 if (has_free_variable_##VARIABLE_NAME){ \
-std::cout << "+ Free Variable '" << #VARIABLE_NAME << "' found\n" << std::endl; \
+std::cout << "+ Free Variable '" << #VARIABLE_NAME << "' found" << std::endl; \
     } \
 else { \
-    std::cout << "- Free Variable '" << #VARIABLE_NAME << "' not found\n" << std::endl; \
+    std::cout << "- Free Variable '" << #VARIABLE_NAME << "' not found" << std::endl; \
     } \
     return ( has_free_variable_##VARIABLE_NAME ); } } 
 
@@ -230,21 +230,21 @@ void evaluation( const std::string& expectedOutput, const bool& Bt1, const bool&
     const bool& Bt3, const bool& Bt4, const bool& Bt5, const bool& Bt6, const bool& Bt7, const bool& Bt8, const bool& Bt9 ) { \
     if ( Bt1 && Bt2 && Bt3 && Bt4 && Bt5 && Bt6 && Bt7 && Bt8 && Bt9 ) { \
         if ( check_output( *( STUDENT::main ), expectedOutput ) ) { \
-            std::cout << std::endl; \
-            std::cout << "+ + Student did great Job! + +\n" << std::endl; }} \
-    else { std::cout << std::endl; \
-        std::cout << "- Student forgot something!\n" << std::endl; }} \
+            std::cout << "______________________________________" << std::endl; \
+            std::cout << "\n+ + + Student did a great Job! + + +\n" << std::endl; }} \
+    else { \
+        std::cout << "______________________________________" << std::endl; \
+        std::cout << "\n- Student forgot something!\n" << std::endl; }} \
 \
 namespace STUDENT::TASK { using namespace ::TASK::TESTER; \
 void testing( ) { \
         bool Bt1 = check_##Class1<Class1>(); bool Bt2 = check_##Class2<Class2>(); bool Bt3 = check_##Class3<Class3>(); \
-        bool Bt4 = check_free_function_##FreeFunction1<>(); bool Bt5 = check_free_function_##FreeFunction2<>(); \
-        bool Bt6 = check_free_function_##FreeFunction3<>(); bool Bt7 = check_free_variable_##FreeVariable1<>(); \
-        bool Bt8 = check_free_variable_##FreeVariable2<>(); bool Bt9 = check_free_variable_##FreeVariable3<>(); \
+        bool Bt4 = check_free_function_##FreeFunction1<>(); bool Bt5 = check_free_function_##FreeFunction2<>(); bool Bt6 = check_free_function_##FreeFunction3<>(); \
+        bool Bt7 = check_free_variable_##FreeVariable1<>(); bool Bt8 = check_free_variable_##FreeVariable2<>(); bool Bt9 = check_free_variable_##FreeVariable3<>(); \
         std::string expectedOutput = ExpectedOutput; \
         ::evaluation( expectedOutput, Bt1, Bt2, Bt3, Bt4, Bt5, Bt6, Bt7, Bt8, Bt9 ); } } \
 \
-int main( ) { STUDENT::TASK::testing( ); return 0; }
+int main( ) { std::cout<<std::endl; STUDENT::TASK::testing( ); return 0; }
 
 
 
@@ -258,14 +258,14 @@ namespace STUDENT {
 
     class MyClassX {
         public:
-       // int IDE;
+        int IDE;
         void printed( ) { cout << "Printed..." << endl; }
         };
 
     class MyClassY {
         public:
         int printed( );
-        int IDE( ) { return 0; };
+        int IDE;
         };
 
     class MyClassZ {
@@ -289,20 +289,24 @@ namespace STUDENT {
 
 //* Student code ends here.
     }
-namespace TASK::TESTER { struct No {}; }
+
 M_OUTPUT( )
 M_CLASS_HANDLING( )
 //! Custom Settings
 M_FREE_VARIABLE( Schokolade , int )
+//? M_FREE_VARIABLE( Variablename, type )
 M_FREE_VARIABLE( Snake , std::string )
 M_FREE_FUNCTION( SomeFunctionX , void )
+//? M_FREE_FUNCTION( Variablename, type )
 M_CLASS_HAS_MEMBER( checks_IDE , IDE )
+//? M_CLASS_HAS_MEMBER( Name for SFINAE-Template, Membername )
 M_CLASS_HAS_MEMBER( checks_printed_f , printed( ) )
 M_CLASS_HAS_MEMBER( checks_AMP , AMP )
 //M_CLASS_AND_MEMBER_1( MyClassX , checks_printed_f , "printed( )" )
 //M_CLASS_AND_MEMBER_2( MyClassX , checks_IDE , "IDE" , checks_printed_f , "printed()" )
 M_CLASS_AND_MEMBER_3( MyClassX , checks_IDE , "IDE" , checks_printed_f , "printed()" , checks_AMP , "AMP" )
 M_CLASS_AND_MEMBER_2( MyClassY , checks_IDE , "IDE" , checks_printed_f , "printed()" )
+//? M_CLASS_AND_MEMBER_2( Classname, 1st Name of the SFINAE-Template, string of 1st Membername, 2nd Name of the SFINAE-Template, string of 2nd Membername )
 //! Mains
 C_MAIN( "Printed...\n" , MyClassX , MyClassY , Filler , SomeFunctionX , Filler , Filler , Schokolade , Snake , Filler )
-// C_MAIN( string Output, Class1, Class2, Class3, FreeFunction1, FreeFunction2, FreeFunction3, Variable1, Variable2, Variable3 )
+//? C_MAIN( string Output, Class1, Class2, Class3, FreeFunction1, FreeFunction2, FreeFunction3, Variable1, Variable2, Variable3 )
