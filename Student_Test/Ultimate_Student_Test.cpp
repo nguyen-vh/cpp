@@ -17,7 +17,7 @@ struct NAME<T , std::void_t<decltype( std::declval<T>( ).MEMBER )>> : std::true_
 #define M_CLASS_AND_MEMBER_1( CLASSNAME, NAME_FROM_HAS_MEMBER, MEMBER_STRING ) \
 namespace TASK::TESTER{ using CLASSNAME = No; } \
 template <typename T> \
-bool CLASSNAME##_class_has_Member_##NAME_FROM_HAS_MEMBER() { \
+bool CLASSNAME##_class_has_Member_##NAME_FROM_HAS_MEMBER( ) { \
     bool result = NAME_FROM_HAS_MEMBER<T>::value; \
     if (result) { \
         std::cout << "+  > Member '" << MEMBER_STRING << "' found\n" << std::endl; \
@@ -27,9 +27,9 @@ bool CLASSNAME##_class_has_Member_##NAME_FROM_HAS_MEMBER() { \
     return result; } \
 \
 template <typename T> \
-bool check_##CLASSNAME() { \
-    bool classResult = check_class<T>(); \
-    bool resultMember = CLASSNAME##_class_has_Member_##NAME_FROM_HAS_MEMBER<T>(); \
+bool check_##CLASSNAME( ) { \
+    bool classResult = check_class<T>( ); \
+    bool resultMember = CLASSNAME##_class_has_Member_##NAME_FROM_HAS_MEMBER<T>( ); \
     return ( classResult && resultMember ); \
     } 
 
@@ -39,7 +39,7 @@ bool check_##CLASSNAME() { \
 namespace TASK::TESTER { using CLASSNAME = No; } \
 \
 template <typename T> \
-bool CLASSNAME##_class_has_Member_##NAME_FROM_HAS_MEMBER() { \
+bool CLASSNAME##_class_has_Member_##NAME_FROM_HAS_MEMBER( ) { \
     bool result = NAME_FROM_HAS_MEMBER<T>::value; \
     if (result) { \
         std::cout << "+  > Member '" << MEMBER_STRING << "' found" << std::endl; \
@@ -50,7 +50,7 @@ bool CLASSNAME##_class_has_Member_##NAME_FROM_HAS_MEMBER() { \
 } \
 \
 template <typename T> \
-bool CLASSNAME##_class_has_Member_##NAME_FROM_HAS_MEMBER_2() { \
+bool CLASSNAME##_class_has_Member_##NAME_FROM_HAS_MEMBER_2( ) { \
     bool result = NAME_FROM_HAS_MEMBER_2<T>::value; \
     if (result) { \
         std::cout << "+  > Member '" << MEMBER_STRING_2 << "' found\n" << std::endl; \
@@ -62,9 +62,9 @@ bool CLASSNAME##_class_has_Member_##NAME_FROM_HAS_MEMBER_2() { \
 \
 template <typename T> \
 bool check_##CLASSNAME() { \
-    bool classResult = check_class<T>(); \
-    bool resultMember = CLASSNAME##_class_has_Member_##NAME_FROM_HAS_MEMBER<T>(); \
-    bool resultMember_2 = CLASSNAME##_class_has_Member_##NAME_FROM_HAS_MEMBER_2<T>(); \
+    bool classResult = check_class<T>( ); \
+    bool resultMember = CLASSNAME##_class_has_Member_##NAME_FROM_HAS_MEMBER<T>( ); \
+    bool resultMember_2 = CLASSNAME##_class_has_Member_##NAME_FROM_HAS_MEMBER_2<T>( ); \
     return ( classResult && resultMember && resultMember_2 ); \
 }
 
@@ -74,7 +74,7 @@ bool check_##CLASSNAME() { \
 namespace TASK::TESTER { using CLASSNAME = No; } \
 \
 template <typename T> \
-bool CLASSNAME##_class_has_Member_##NAME_FROM_HAS_MEMBER() { \
+bool CLASSNAME##_class_has_Member_##NAME_FROM_HAS_MEMBER( ) { \
     bool result = NAME_FROM_HAS_MEMBER<T>::value; \
     if (result) { \
         std::cout << "+  > Member '" << MEMBER_STRING << "' found" << std::endl; \
@@ -85,7 +85,7 @@ bool CLASSNAME##_class_has_Member_##NAME_FROM_HAS_MEMBER() { \
 } \
 \
 template <typename T> \
-bool CLASSNAME##_class_has_Member_##NAME_FROM_HAS_MEMBER_2() { \
+bool CLASSNAME##_class_has_Member_##NAME_FROM_HAS_MEMBER_2( ) { \
     bool result = NAME_FROM_HAS_MEMBER_2<T>::value; \
     if (result) { \
         std::cout << "+  > Member '" << MEMBER_STRING_2 << "' found" << std::endl; \
@@ -95,8 +95,8 @@ bool CLASSNAME##_class_has_Member_##NAME_FROM_HAS_MEMBER_2() { \
     return result; \
 } \
 template <typename T> \
-bool CLASSNAME##_class_has_Member_##NAME_FROM_HAS_MEMBER_3() { \
-    bool result = NAME_FROM_HAS_MEMBER_2<T>::value; \
+bool CLASSNAME##_class_has_Member_##NAME_FROM_HAS_MEMBER_3( ) { \
+    bool result = NAME_FROM_HAS_MEMBER_3<T>::value; \
     if (result) { \
         std::cout << "+  > Member '" << MEMBER_STRING_3 << "' found\n" << std::endl; \
     } else { \
@@ -106,17 +106,26 @@ bool CLASSNAME##_class_has_Member_##NAME_FROM_HAS_MEMBER_3() { \
 } \
 \
 template <typename T> \
-bool check_##CLASSNAME() { \
+bool check_##CLASSNAME( ) { \
     bool classResult = check_class<T>(); \
-    bool resultMember = CLASSNAME##_class_has_Member_##NAME_FROM_HAS_MEMBER<T>(); \
-    bool resultMember_2 = CLASSNAME##_class_has_Member_##NAME_FROM_HAS_MEMBER_2<T>(); \
-    bool resultMember_3 = CLASSNAME##_class_has_Member_##NAME_FROM_HAS_MEMBER_3<T>(); \
+    bool resultMember = CLASSNAME##_class_has_Member_##NAME_FROM_HAS_MEMBER<T>( ); \
+    bool resultMember_2 = CLASSNAME##_class_has_Member_##NAME_FROM_HAS_MEMBER_2<T>( ); \
+    bool resultMember_3 = CLASSNAME##_class_has_Member_##NAME_FROM_HAS_MEMBER_3<T>( ); \
     return ( classResult && resultMember && resultMember_2 && resultMember_3 ); \
 }
 
 
+//* SFINAE Check for a Member with specific type
+#define M_CLASS_HAS_MEMBER_T( NAME, MEMBER, TYPE ) \
+template <typename T, typename = void> \
+struct NAME : std::false_type {}; \
+\
+template <typename T> \
+struct NAME<T , std::void_t<decltype( std::declval<T>( ).MEMBER )>> : std::is_same<decltype(std::declval<T>( ).MEMBER), TYPE>{};
+
+
 //* Checks for the Existence of a Class
-#define M_CLASS_HANDLING() \
+#define M_CLASS_HANDLING( ) \
 template <typename T> \
 bool check_class( ) { \
 std::string strClassN = typeid( T ).name( ) , strClassNreadable {}; \
@@ -136,13 +145,13 @@ struct Filler {}; \
     template <typename T , typename = void> \
     struct check_Filler : std::true_type {}; \
  template <typename = void> \
- bool check_free_function_Filler(){ return true; } \
+ bool check_free_function_Filler( ){ return true; } \
 template <typename = void> \
- bool check_free_variable_Filler(){ return true; }
+ bool check_free_variable_Filler( ){ return true; }
 
 
 //* Evaluates the output from Student
-#define M_OUTPUT() \
+#define M_OUTPUT( ) \
 template <typename T> \
 bool check_output( T&& main_call , const std::string& expectedOutput ) { \
     std::stringstream output_stream; \
@@ -162,7 +171,7 @@ namespace TASK::TESTER { struct No {}; }
 
 //* Check for Free Function
 #define M_FREE_FUNCTION( FUNCTION_NAME, TYPE ) \
-namespace TASK::TESTER{ char FUNCTION_NAME(); } \
+namespace TASK::TESTER{ char FUNCTION_NAME( ); } \
 namespace STUDENT::TASK { \
     using namespace ::TASK::TESTER; \
 \
@@ -293,6 +302,8 @@ namespace STUDENT {
 M_OUTPUT( )
 M_CLASS_HANDLING( )
 //! Custom Settings
+M_CLASS_HAS_MEMBER_T( checks_AMP_T , AMP , int )
+M_CLASS_HAS_MEMBER_T( checks_OHM_f_T , OHM( ) , void )
 M_FREE_VARIABLE( Schokolade , int )
 //? M_FREE_VARIABLE( Variablename, type )
 M_FREE_VARIABLE( Snake , std::string )
@@ -307,6 +318,7 @@ M_CLASS_HAS_MEMBER( checks_AMP , AMP )
 M_CLASS_AND_MEMBER_3( MyClassX , checks_IDE , "IDE" , checks_printed_f , "printed()" , checks_AMP , "AMP" )
 M_CLASS_AND_MEMBER_2( MyClassY , checks_IDE , "IDE" , checks_printed_f , "printed()" )
 //? M_CLASS_AND_MEMBER_2( Classname, 1st Name of the SFINAE-Template, string of 1st Membername, 2nd Name of the SFINAE-Template, string of 2nd Membername )
+M_CLASS_AND_MEMBER_2( MyClassZ , checks_AMP_T , "AMP" , checks_OHM_f_T , "OHM()" )
 //! Mains
-C_MAIN( "Printed...\n" , MyClassX , MyClassY , Filler , SomeFunctionX , Filler , Filler , Schokolade , Snake , Filler )
+C_MAIN( "Printed...\n" , MyClassX , MyClassY , MyClassZ , SomeFunctionX , Filler , Filler , Schokolade , Snake , Filler )
 //? C_MAIN( string Output, Class1, Class2, Class3, FreeFunction1, FreeFunction2, FreeFunction3, Variable1, Variable2, Variable3 )
