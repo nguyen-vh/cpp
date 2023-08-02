@@ -6,6 +6,11 @@ on:
       - main
     paths:
       - 'Student_Test/**'
+  pull_request:
+    branches:
+      - main
+    paths:
+      - 'Student_Test/**' 
 
 jobs:
   build:

@@ -6,6 +6,11 @@ on:
       - main
     paths:
       - ' _FOLDERNAME_/**'
+  pull_request:
+    branches:
+      - main
+    paths:
+      - ' _FOLDERNAME_/**' 
 
 jobs:
   build:

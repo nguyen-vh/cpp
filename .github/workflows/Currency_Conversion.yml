@@ -6,6 +6,11 @@ on:
       - main
     paths:
       - 'Currency_Conversion/**'
+  pull_request:
+    branches:
+      - main
+    paths:
+      - 'Currency_Conversion/**'    
 
 jobs:
   build:

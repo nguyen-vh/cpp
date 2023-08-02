@@ -6,6 +6,11 @@ on:
       - main
     paths:
       - 'SHA2_256/**'
+  pull_request:
+    branches:
+      - main
+    paths:
+      - 'SHA2_256/**'       
 
 jobs:
   build:
