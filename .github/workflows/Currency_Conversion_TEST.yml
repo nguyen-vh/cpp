@@ -4,6 +4,8 @@ on:
   push:
     branches:
       - main
+    paths:
+      - 'Currency_Conversion/**'
 
 jobs:
   build:
@@ -14,7 +16,7 @@ jobs:
         uses: actions/checkout@v2
 
       - name: Install g++
-        run: sudo apt-get install -y g++     # Installs the default g++ version (latest)
+        run: sudo apt-get install -y g++
 
       - name: Compile C++ files with g++ (C++20)
         run: |
@@ -23,3 +25,4 @@ jobs:
             g++ -std=c++20 -o "${file%.cpp}" "$file"
           done
         working-directory: ${{ github.workspace }}
+
