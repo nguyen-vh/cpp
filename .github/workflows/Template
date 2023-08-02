@@ -5,7 +5,7 @@ on:
     branches:
       - main
     paths:
-      - ' _FOLDERNAME_ /**'
+      - ' _FOLDERNAME_/**'
 
 jobs:
   build:
