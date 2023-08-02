@@ -1,4 +1,4 @@
-name: C++ Compile Test
+name: C++ Compile Test Currency_Conversion
 
 on:
   push:
