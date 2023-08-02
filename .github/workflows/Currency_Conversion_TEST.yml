@@ -1,0 +1,21 @@
+name: C++ Compile Test
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v2
+
+      - name: Install g++
+        run: sudo apt-get install -y g++     # Installs the default g++ version (latest)
+
+      - name: Compile C++ files with g++ (C++20)
+        run: g++ -std=c++20 -o my_executable *.cpp
+
