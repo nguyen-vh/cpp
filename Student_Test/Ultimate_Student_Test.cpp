@@ -124,34 +124,39 @@ template <typename T> \
 struct NAME<T , std::void_t<decltype( std::declval<T>( ).MEMBER )>> : std::is_same<decltype(std::declval<T>( ).MEMBER), TYPE>{};
 
 
+//* Fallback for M_MAIN
+#define M_FALLBACKS \
+struct Filler {}; \
+template <typename T , typename = void> \
+struct check_Filler : std::true_type {}; \
+template <typename = void> \
+    bool check_free_function_Filler( ){ return true; } \
+template <typename = void> \
+    bool check_free_variable_Filler( ){ return true; } \
+namespace TASK::TESTER { struct No {}; } 
+
+
 //* Checks for the Existence of a Class
-#define M_CLASS_HANDLING( ) \
-template <typename T> \
-bool check_class( ) { \
-std::string strClassN = typeid( T ).name( ) , strClassNreadable {}; \
+#define M_CLASS_HANDLING \
+    template <typename T> \
+    bool check_class( ) { \
+        std::string strClassN = typeid( T ).name( ) , strClassNreadable {}; \
         strClassN = strClassN.erase( 0 , 9 ); \
         for ( int i = 0; i < strClassN.length( ); ++i ) { \
             if ( std::isdigit( strClassN [ i ] ) ) { \
                 if ( !std::isdigit( strClassN [ i + 1 ] ) ) { \
-                    strClassNreadable = strClassN.substr( i + 1 ); } } } \
-                    strClassNreadable.pop_back( ); \
-    if ( !std::is_same<T , TASK::TESTER::No>::value ) { \
-        std::cout << "+ Class '" << strClassNreadable << "' found" << std::endl; \
-        return true; } else { \
-        std::cout << "- Class in Assignment not found. " << std::endl; \
-        return false; }} \
-\
-struct Filler {}; \
-    template <typename T , typename = void> \
-    struct check_Filler : std::true_type {}; \
- template <typename = void> \
- bool check_free_function_Filler( ){ return true; } \
-template <typename = void> \
- bool check_free_variable_Filler( ){ return true; }
+                strClassNreadable = strClassN.substr( i + 1 ); } } } \
+            strClassNreadable.pop_back( ); \
+            if ( !std::is_same<T , TASK::TESTER::No>::value ) { \
+                std::cout << "+ Class '" << strClassNreadable << "' found" << std::endl; \
+                        return true; } else { \
+                std::cout << "- Class in Assignment not found. " << std::endl; \
+                        return false; } }
 
 
-//* Evaluates the output from Student
-#define M_OUTPUT( ) \
+
+  //* Evaluates the output from Student
+#define M_OUTPUT \
 template <typename T> \
 bool check_output( T&& main_call , const std::string& expectedOutput ) { \
     std::stringstream output_stream; \
@@ -165,8 +170,7 @@ bool check_output( T&& main_call , const std::string& expectedOutput ) { \
         std::cout << "\n- Student Output incorrect" << std::endl; \
         std::cout << "   > Expected Output: " << expectedOutput   \
          << "   >  Student Output: " << STUDENTOutput << std::endl; \
-        return false; }} \
-namespace TASK::TESTER { struct No {}; }
+        return false; }}
 
 
 //* Check for Free Function
@@ -234,7 +238,7 @@ else { \
 
 
 //* Main Input Processing
-#define C_MAIN( ExpectedOutput, Class1, Class2, Class3, FreeFunction1, FreeFunction2, FreeFunction3, FreeVariable1, FreeVariable2, FreeVariable3 ) \
+#define M_MAIN( ExpectedOutput, Class1, Class2, Class3, FreeFunction1, FreeFunction2, FreeFunction3, FreeVariable1, FreeVariable2, FreeVariable3 ) \
 void evaluation( const std::string& expectedOutput, const bool& Bt1, const bool& Bt2, \
     const bool& Bt3, const bool& Bt4, const bool& Bt5, const bool& Bt6, const bool& Bt7, const bool& Bt8, const bool& Bt9 ) { \
     if ( Bt1 && Bt2 && Bt3 && Bt4 && Bt5 && Bt6 && Bt7 && Bt8 && Bt9 ) { \
@@ -299,9 +303,13 @@ namespace STUDENT {
 //* Student code ends here.
     }
 
-M_OUTPUT( )
-M_CLASS_HANDLING( )
+M_FALLBACKS
+M_OUTPUT
+M_CLASS_HANDLING
 //! Custom Settings
+
+// Example for what is possbile
+
 M_CLASS_HAS_MEMBER_T( checks_AMP_T , AMP , int )
 M_CLASS_HAS_MEMBER_T( checks_OHM_f_T , OHM( ) , void )
 M_FREE_VARIABLE( Schokolade , int )
@@ -313,12 +321,10 @@ M_CLASS_HAS_MEMBER( checks_IDE , IDE )
 //? M_CLASS_HAS_MEMBER( Name for SFINAE-Template, Membername )
 M_CLASS_HAS_MEMBER( checks_printed_f , printed( ) )
 M_CLASS_HAS_MEMBER( checks_AMP , AMP )
-//M_CLASS_AND_MEMBER_1( MyClassX , checks_printed_f , "printed( )" )
-//M_CLASS_AND_MEMBER_2( MyClassX , checks_IDE , "IDE" , checks_printed_f , "printed()" )
 M_CLASS_AND_MEMBER_3( MyClassX , checks_IDE , "IDE" , checks_printed_f , "printed()" , checks_AMP , "AMP" )
 M_CLASS_AND_MEMBER_2( MyClassY , checks_IDE , "IDE" , checks_printed_f , "printed()" )
 //? M_CLASS_AND_MEMBER_2( Classname, 1st Name of the SFINAE-Template, string of 1st Membername, 2nd Name of the SFINAE-Template, string of 2nd Membername )
-M_CLASS_AND_MEMBER_2( MyClassZ , checks_AMP_T , "AMP" , checks_OHM_f_T , "OHM()" )
+M_CLASS_AND_MEMBER_2( MyClassZ , checks_AMP_T , "int AMP" , checks_OHM_f_T , "void OHM()" )
 //! Mains
-C_MAIN( "Printed...\n" , MyClassX , MyClassY , MyClassZ , SomeFunctionX , Filler , Filler , Schokolade , Snake , Filler )
+M_MAIN( "Printed...\n" , MyClassX , MyClassY , MyClassZ , SomeFunctionX , Filler , Filler , Schokolade , Snake , Filler )
 //? C_MAIN( string Output, Class1, Class2, Class3, FreeFunction1, FreeFunction2, FreeFunction3, Variable1, Variable2, Variable3 )
