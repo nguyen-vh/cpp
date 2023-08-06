@@ -5,7 +5,7 @@
 //! Macros
 
 //* SFINAE Check for a Member (Member can be for example Function with () and
-//Variable)
+// Variable)
 #define M_CLASS_HAS_MEMBER(NAME, MEMBER)                          \
   template <typename T, typename = void>                          \
   struct NAME : std::false_type {};                               \
@@ -163,6 +163,12 @@
   }                                        \
   namespace TASK::TESTER {                 \
   struct No {};                            \
+  }                                        \
+  namespace TASK::TESTER {                 \
+  int main() {                             \
+    std::cout << "" << std::endl;          \
+    return 0;                              \
+  }                                        \
   }
 
 //* Checks for the Existence of a Class
@@ -281,46 +287,49 @@
   }
 
 //* Main Input Processing
-#define M_MAIN(ExpectedOutput, Class1, Class2, Class3, FreeFunction1,          \
-               FreeFunction2, FreeFunction3, FreeVariable1, FreeVariable2,     \
-               FreeVariable3)                                                  \
-  void evaluation(const std::string& expectedOutput, const bool& Bt1,          \
-                  const bool& Bt2, const bool& Bt3, const bool& Bt4,           \
-                  const bool& Bt5, const bool& Bt6, const bool& Bt7,           \
-                  const bool& Bt8, const bool& Bt9) {                          \
-    if (Bt1 && Bt2 && Bt3 && Bt4 && Bt5 && Bt6 && Bt7 && Bt8 && Bt9) {         \
-      if (check_output(*(STUDENT::main), expectedOutput)) {                    \
-        std::cout << "______________________________________" << std::endl;    \
-        std::cout << "\n+ + + Student did a great Job! + + +\n" << std::endl;  \
-      }                                                                        \
-    } else {                                                                   \
-      std::cout << "______________________________________" << std::endl;      \
-      std::cout << "\n- Student forgot something!\n" << std::endl;             \
-    }                                                                          \
-  }                                                                            \
-                                                                               \
-  namespace STUDENT::TASK {                                                    \
-  using namespace ::TASK::TESTER;                                              \
-  void testing() {                                                             \
-    bool Bt1 = check_##Class1<Class1>();                                       \
-    bool Bt2 = check_##Class2<Class2>();                                       \
-    bool Bt3 = check_##Class3<Class3>();                                       \
-    bool Bt4 = check_free_function_##FreeFunction1<>();                        \
-    bool Bt5 = check_free_function_##FreeFunction2<>();                        \
-    bool Bt6 = check_free_function_##FreeFunction3<>();                        \
-    bool Bt7 = check_free_variable_##FreeVariable1<>();                        \
-    bool Bt8 = check_free_variable_##FreeVariable2<>();                        \
-    bool Bt9 = check_free_variable_##FreeVariable3<>();                        \
-    std::string expectedOutput = ExpectedOutput;                               \
-    ::evaluation(expectedOutput, Bt1, Bt2, Bt3, Bt4, Bt5, Bt6, Bt7, Bt8, Bt9); \
-  }                                                                            \
-  }                                                                            \
-                                                                               \
-  int main() {                                                                 \
-    std::cout << std::endl;                                                    \
-    STUDENT::TASK::testing();                                                  \
-    return 0;                                                                  \
+#define M_MAIN(ExpectedOutput, Class1, Class2, Class3, FreeFunction1,        \
+               FreeFunction2, FreeFunction3, FreeVariable1, FreeVariable2,   \
+               FreeVariable3)                                                \
+  void evaluation(const bool& EO, const bool& Bt1, const bool& Bt2,          \
+                  const bool& Bt3, const bool& Bt4, const bool& Bt5,         \
+                  const bool& Bt6, const bool& Bt7, const bool& Bt8,         \
+                  const bool& Bt9) {                                         \
+    if (Bt1 && Bt2 && Bt3 && Bt4 && Bt5 && Bt6 && Bt7 && Bt8 && Bt9 && EO) { \
+      std::cout << "______________________________________" << std::endl;    \
+      std::cout << "\n> > Student did a great Job! < <\n" << std::endl;      \
+    } else {                                                                 \
+      std::cout << "______________________________________" << std::endl;    \
+      std::cout << "\n> > Student forgot something! < <\n" << std::endl;     \
+    }                                                                        \
+  }                                                                          \
+                                                                             \
+  namespace STUDENT::TASK {                                                  \
+  using namespace ::TASK::TESTER;                                            \
+  void testing() {                                                           \
+    bool Bt1 = check_##Class1<Class1>();                                     \
+    bool Bt2 = check_##Class2<Class2>();                                     \
+    bool Bt3 = check_##Class3<Class3>();                                     \
+    bool Bt4 = check_free_function_##FreeFunction1<>();                      \
+    bool Bt5 = check_free_function_##FreeFunction2<>();                      \
+    bool Bt6 = check_free_function_##FreeFunction3<>();                      \
+    bool Bt7 = check_free_variable_##FreeVariable1<>();                      \
+    bool Bt8 = check_free_variable_##FreeVariable2<>();                      \
+    bool Bt9 = check_free_variable_##FreeVariable3<>();                      \
+    bool EO = check_output(*(main), ExpectedOutput);                         \
+    ::evaluation(EO, Bt1, Bt2, Bt3, Bt4, Bt5, Bt6, Bt7, Bt8, Bt9);           \
+  }                                                                          \
+  }                                                                          \
+                                                                             \
+  int main(int argc, char* argv[]) {                                         \
+    std::cout << std::endl;                                                  \
+    STUDENT::TASK::testing();                                                \
+    return 0;                                                                \
   }
+
+#define M_START \
+  M_FALLBACKS   \
+  M_OUTPUT      \
+  M_CLASS_HANDLING
 
 //! STUDENT Code
 namespace STUDENT {
@@ -365,33 +374,17 @@ int main() {
 //* Student code ends here.
 }  // namespace STUDENT
 
-M_FALLBACKS
-M_OUTPUT
-M_CLASS_HANDLING
-//! Custom Settings
+M_START
 
-// Example for what is possbile
-
+M_CLASS_HAS_MEMBER(checks_IDE, IDE)
+M_CLASS_HAS_MEMBER(checks_printed_f, printed())
 M_CLASS_HAS_MEMBER_T(checks_AMP_T, AMP, int)
 M_CLASS_HAS_MEMBER_T(checks_OHM_f_T, OHM(), void)
 M_FREE_VARIABLE(Schokolade, int)
-//? M_FREE_VARIABLE( Variablename, type )
-M_FREE_VARIABLE(Snake, std::string)
 M_FREE_FUNCTION(SomeFunctionX, void)
-//? M_FREE_FUNCTION( Variablename, type )
-M_CLASS_HAS_MEMBER(checks_IDE, IDE)
-//? M_CLASS_HAS_MEMBER( Name for SFINAE-Template, Membername )
-M_CLASS_HAS_MEMBER(checks_printed_f, printed())
-M_CLASS_HAS_MEMBER(checks_AMP, AMP)
-M_CLASS_AND_MEMBER_3(MyClassX, checks_IDE, "IDE", checks_printed_f, "printed()",
-                     checks_AMP, "AMP")
+M_CLASS_AND_MEMBER_2(MyClassX, checks_IDE, "IDE", checks_printed_f, "printed()")
 M_CLASS_AND_MEMBER_2(MyClassY, checks_IDE, "IDE", checks_printed_f, "printed()")
-//? M_CLASS_AND_MEMBER_2( Classname, 1st Name of the SFINAE-Template, string of
-//1st Membername, 2nd Name of the SFINAE-Template, string of 2nd Membername )
-M_CLASS_AND_MEMBER_2(MyClassZ, checks_AMP_T, "int AMP", checks_OHM_f_T,
-                     "void OHM()")
-//! Mains
+M_CLASS_AND_MEMBER_1(MyClassZ, checks_OHM_f_T, "void OHM()")
+
 M_MAIN("Printed...\n", MyClassX, MyClassY, MyClassZ, SomeFunctionX, Filler,
-       Filler, Schokolade, Snake, Filler)
-//? C_MAIN( string Output, Class1, Class2, Class3, FreeFunction1, FreeFunction2,
-//FreeFunction3, Variable1, Variable2, Variable3 )
+       Filler, Schokolade, Filler, Filler)
