@@ -1,0 +1,81 @@
+{
+	"-Name-": {
+		"prefix": [
+			""
+		],
+		"body": [],
+		"description": ""
+	},
+	"std::cout to file": {
+		"prefix": [
+			"redirectcoutFile"
+		],
+		"body": [
+			"// include <fstream>",
+			"std::ofstream ${2:output}(${1:/*Output.txt*/});",
+			"std::streambuf* std_buffer = std::cout.rdbuf();",
+			"std::cout.rdbuf(${2:output}.rdbuf());\n",
+			"std::cout.rdbuf(std_buffer);"
+		],
+		"description": "Redirct std::cout to file"
+	},
+	"std::cout to string": {
+		"prefix": [
+			"redirectcoutString"
+		],
+		"body": [
+			"// include <sstream>",
+			"std::stringstream output_stream;",
+			"std::streambuf* std_buffer = std::cout.rdbuf(output_stream.rdbuf());\n",
+			"std::cout.rdbuf(std_buffer);",
+			"std::string ${1:Output} = output_stream.str();"
+		],
+		"description": "Redirct std::cout to string"
+	},
+	"Fast Start": {
+		"prefix": [
+			"fastStart"
+		],
+		"body": [
+			"#include <iostream>\n",
+			"int main(int argc, char* argv[]) {\n",
+			"$1\n\n",
+			"return 0;",
+			"}"
+		],
+		"description": "Redirct std::cout to string"
+	},
+	"find num in string": {
+		"prefix": [
+			"stringfindnumber"
+		],
+		"body": [
+			"// include <algorithm>",
+			"auto is_num = [](char num) { return std::isdigit(num); };",
+			"auto num_start =std: :find_if(${1:Message}.begin(), ${1:Message}.end(), is_num);",
+			"auto num_end = std::find_if_not(num_start, ${1:Message}.end(), is_num);",
+			"number = std::string(num_start, num_end)"
+		],
+		"description": "Find the first Number in a string"
+	},
+	"Windows/Unix Macro": {
+		"prefix": [
+			"#ifdef _WIN32"
+		],
+		"body": [
+			"#ifdef _WIN32\n",
+			"$1\n",
+			"#else\n",
+			"$2\n",
+			"#endif"
+		],
+		"description": "Macro for Windows/ Unix specific code"
+	},
+	"": {
+		"prefix": [
+			""
+		],
+		"body": [],
+		"description": ""
+	}
+}
