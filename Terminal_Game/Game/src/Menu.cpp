@@ -8,10 +8,10 @@ void Menu::displayRPG_GameMenu() {
   while (true) {
     std::cout << std::endl;
     std::cout << "===== RPG Game =====\n";
-    std::cout << "1. Start Game\n";
-    std::cout << "2. Load Game\n";
-    std::cout << "3. Settings\n";
-    std::cout << "4. Quit\n";
+    std::cout << "[1] Start Game\n";
+    std::cout << "[2] Load Game\n";
+    std::cout << "[3] Settings\n";
+    std::cout << "[4] Quit\n";
 
     int option = getIntegerInput();
 
@@ -66,11 +66,11 @@ void Menu::displaySettingsMenu() {
   while (true) {
     std::cout << std::endl;
     std::cout << "===== Settings =====\n";
-    std::cout << "0. Go Back\n";
-    std::cout << "1. Set Easy\n";
-    std::cout << "2. Set Normal\n";
-    std::cout << "3. Set Hard\n";
-    std::cout << "4. Set Hardcode\n";
+    std::cout << "[0] Go Back\n";
+    std::cout << "[1] Set Easy\n";
+    std::cout << "[2] Set Normal\n";
+    std::cout << "[3] Set Hard\n";
+    std::cout << "[4] Set Hardcode\n";
 
     int option = getIntegerInput();
 
@@ -108,12 +108,12 @@ void Menu::displayMainMenu() {
   while (true) {
     std::cout << std::endl;
     std::cout << "===== Menu =====\n";
-    std::cout << "1. Raiders\n";
-    std::cout << "2. Town\n";
-    std::cout << "3. Tower\n";
-    std::cout << "4. Inventory\n";
-    std::cout << "5. Save/Load\n";
-    std::cout << "6. Exit Game\n";
+    std::cout << "[1] Raiders\n";
+    std::cout << "[2] Town\n";
+    std::cout << "[3] Tower\n";
+    std::cout << "[4] Inventory\n";
+    std::cout << "[5] Save/Load\n";
+    std::cout << "[6] Exit Game\n";
 
     int option = getIntegerInput();
 
@@ -159,9 +159,9 @@ void Menu::displayRaidersMenu(std::vector<Character>& characters,
   while (true) {
     std::cout << std::endl;
     std::cout << "===== Raiders =====" << std::endl;
-    std::cout << "0. Go Back\n";
-    std::cout << "1. Show Raiders\n";
-    std::cout << "2. Recruit Raider\n";
+    std::cout << "[0] Go Back\n";
+    std::cout << "[1] Show Raiders\n";
+    std::cout << "[2] Recruit Raider\n";
 
     int option = getIntegerInput();
 
@@ -192,43 +192,45 @@ void Menu::displayShowRaidersMenu(std::vector<Character>& characters) {
   while (true) {
     std::cout << std::endl;
     std::cout << "===== Show Raiders =====\n";
-    std::cout << "0. Go Back\n";
+    std::cout << "[0] Go Back\n";
 
     if (!characters.empty()) {
       int index = 1;
       for (const Character& character : characters) {
-        std::cout << index << ". " << character.getName() << std::endl;
+        std::cout << "[" << index << "] " << character.getName() << std::endl;
         index++;
       }
     } else {
       std::cout << std::endl;
       std::cout << "You currently have no Raiders.\n";
       std::cout << std::endl;
-      std::cout << "0. Go Back\n";
+      std::cout << "[0] Go Back\n";
     }
 
-    int characterNum = getIntegerInput();
+    int option = getIntegerInput();
+    int characterNum = option;
 
-    if (characterNum == 0) {
+    if (option == 0) {
       return;
     }
 
-    if (characterNum > 0) {
+    if (option > 0) {
       while (true) {
+        std::cout << std::endl;
         characters[characterNum - 1].showCharacter();
         std::cout << "Skill Points: "
                   << characters[characterNum - 1].getSkillPoints() << "\n";
         std::cout << std::endl;
-        std::cout << "0. Go Back\n";
-        std::cout << "1. +1 STR\n";
-        std::cout << "2. +1 AGI\n";
-        std::cout << "3. +1 DEX\n";
-        std::cout << "4. +1 END\n";
-        std::cout << "5. +1 INT\n";
-        std::cout << "6. +1 WIS\n";
-        std::cout << "7. +1 CHA\n";
-        std::cout << "8. +1 LUK\n";
-        std::cout << "9. Open Stats\n";
+        std::cout << "[0] Go Back\n";
+        std::cout << "[1] +1 STR\n";
+        std::cout << "[2] +1 AGI\n";
+        std::cout << "[3] +1 DEX\n";
+        std::cout << "[4] +1 END\n";
+        std::cout << "[5] +1 INT\n";
+        std::cout << "[6] +1 WIS\n";
+        std::cout << "[7] +1 CHA\n";
+        std::cout << "[8] +1 LUK\n";
+        std::cout << "[9] Open Stats\n";
 
         int option = getIntegerInput();
 
@@ -316,6 +318,25 @@ void Menu::displayShowRaidersMenu(std::vector<Character>& characters) {
             }
             break;
           }
+          case 9: {
+            while (true) {
+              std::cout << std::endl;
+
+              std::cout << "===== Secondary Stats =====\n";
+              characters[characterNum - 1].updateSecondaryStats();
+              characters[characterNum - 1].showSecondaryStats();
+
+              std::cout << "[0] Go Back\n";
+
+              int option = getIntegerInput();
+
+              if (option == 0) {
+                return;
+              }
+            }
+            break;
+          }
+
           default: {
             std::cout << std::endl;
             std::cout << "Invalid option. Please try again.\n";
@@ -336,10 +357,10 @@ void Menu::displayRecruitRaiderMenu(std::vector<Character>& characters,
     std::cout << "Balance: " << playerCurrency.GetGold() << " Gold "
               << playerCurrency.GetSilver() << " Silver\n"
               << std::endl;
-    std::cout << "0. Go Back\n";
-    std::cout << "1. Raider (weak) for 10 Gold\n";
-    std::cout << "2. Raider (average) for 35 Gold\n";
-    std::cout << "3. Raider (strong) for 100 Gold\n";
+    std::cout << "[0] Go Back\n";
+    std::cout << "[1] Weak Raider for 10 Gold\n";
+    std::cout << "[2] Average Raider for 35 Gold\n";
+    std::cout << "[3] Strong Raider for 100 Gold\n";
 
     int option = getIntegerInput();
 
@@ -392,7 +413,7 @@ void Menu::displayRecruitRaiderTypeMenu(std::vector<Character>& characters,
         } else {
           std::cout << std::endl;
           std::cout << "Not enough Gold!\n" << std::endl;
-          std::cout << "0. Go Back\n";
+          std::cout << "[0] Go Back\n";
           int option = getIntegerInput();
 
           if (option == 0) {
@@ -418,7 +439,7 @@ void Menu::displayRecruitRaiderTypeMenu(std::vector<Character>& characters,
         } else {
           std::cout << std::endl;
           std::cout << "Not enough Gold!\n" << std::endl;
-          std::cout << "0. Go Back\n";
+          std::cout << "[0] Go Back\n";
           int option = getIntegerInput();
 
           if (option == 0) {
@@ -444,7 +465,7 @@ void Menu::displayRecruitRaiderTypeMenu(std::vector<Character>& characters,
         } else {
           std::cout << std::endl;
           std::cout << "Not enough Gold!\n" << std::endl;
-          std::cout << "0. Go Back\n";
+          std::cout << "[0] Go Back\n";
           int option = getIntegerInput();
 
           if (option == 0) {
@@ -470,9 +491,9 @@ void Menu::displayTownMenu(const Currency& playerCurrency) {
     std::cout << "Balance: " << playerCurrency.GetGold() << " Gold "
               << playerCurrency.GetSilver() << " Silver\n"
               << std::endl;
-    std::cout << "0. Go Back\n";
-    std::cout << "1. Shop\n";
-    std::cout << "2. Upgrade Town\n";
+    std::cout << "[0] Go Back\n";
+    std::cout << "[1] Shop\n";
+    std::cout << "[2] Upgrade Town\n";
 
     int option = getIntegerInput();
 
@@ -499,9 +520,9 @@ void Menu::displayTowerMenu() {
   while (true) {
     std::cout << std::endl;
     std::cout << "===== Tower =====" << std::endl;
-    std::cout << "0. Go Back\n";
-    std::cout << "1. -\n";
-    std::cout << "2. -\n";
+    std::cout << "[0] Go Back\n";
+    std::cout << "[1] -\n";
+    std::cout << "[2] -\n";
 
     int option = getIntegerInput();
 
@@ -528,9 +549,9 @@ void Menu::displayInventoryMenu() {
   while (true) {
     std::cout << std::endl;
     std::cout << "===== Inventory =====" << std::endl;
-    std::cout << "0. Go Back\n";
-    std::cout << "1. -\n";
-    std::cout << "2. -\n";
+    std::cout << "[0] Go Back\n";
+    std::cout << "[1] -\n";
+    std::cout << "[2] -\n";
 
     int option = getIntegerInput();
 
@@ -557,9 +578,9 @@ void Menu::displaySaveLoadMenu() {
   while (true) {
     std::cout << std::endl;
     std::cout << "===== Save/Load =====" << std::endl;
-    std::cout << "0. Go Back\n";
-    std::cout << "1. -\n";
-    std::cout << "2. -\n";
+    std::cout << "[0] Go Back\n";
+    std::cout << "[1] -\n";
+    std::cout << "[2] -\n";
 
     int option = getIntegerInput();
 

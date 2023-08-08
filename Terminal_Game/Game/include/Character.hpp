@@ -3,6 +3,7 @@
 
 #include <cmath>
 #include <iostream>
+#include <map>
 #include <unordered_map>
 
 #include "Global.hpp"
@@ -13,6 +14,28 @@ class Character {
   Character(const std::string& name);
 
   enum class Stat { LVL, STR, AGI, DEX, END, INT, WIS, CHA, LUK };
+
+  enum class SecondaryStats {
+    HP,
+    MP,
+    ATK,
+    DEF,
+    MATK,
+    MDEF,
+    SPD,
+    ACC,
+    INIT,
+    DR,
+    CRIT,
+    CRITdmg,
+    HPregen,
+    MPregen,
+    MRES,
+    StatusRES,
+    StatusDur,
+    LootBonus,
+    GoldBonus
+  };
 
   enum class CharacterType { Weak, Average, Strong };
 
@@ -25,6 +48,8 @@ class Character {
   void setCharacterStat(Stat stat, int Value);
 
   void showCharacter() const;
+
+  void showSecondaryStats() const;
 
   void addEXP(int amount);
 
@@ -40,10 +65,16 @@ class Character {
 
   void useSkillPoint(Stat stat);
 
+  std::map<SecondaryStats, double> updateSecondaryStats();
+
+  std::string secondaryStatToString(SecondaryStats stat) const;
+
  private:
   std::string name{};
 
   std::unordered_map<Stat, int> characterStats;
+
+  std::map<SecondaryStats, double> secondarycharacterStats;
 
   static std::unordered_map<Stat, int> getStatsForType(CharacterType type);
 

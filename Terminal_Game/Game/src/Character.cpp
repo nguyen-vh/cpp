@@ -127,6 +127,72 @@ std::string Character::statToString(Character::Stat stat) const {
   }
 }
 
+std::string Character::secondaryStatToString(
+    Character::SecondaryStats stat) const {
+  switch (stat) {
+    case Character::SecondaryStats::HP: {
+      return "HP";
+    }
+    case Character::SecondaryStats::MP: {
+      return "MP";
+    }
+    case Character::SecondaryStats::ATK: {
+      return "ATK";
+    }
+    case Character::SecondaryStats::DEF: {
+      return "DEF";
+    }
+    case Character::SecondaryStats::MATK: {
+      return "MATK";
+    }
+    case Character::SecondaryStats::MDEF: {
+      return "MDEF";
+    }
+    case Character::SecondaryStats::SPD: {
+      return "SPD";
+    }
+    case Character::SecondaryStats::ACC: {
+      return "ACC";
+    }
+    case Character::SecondaryStats::INIT: {
+      return "INIT";
+    }
+    case Character::SecondaryStats::DR: {
+      return "DR";
+    }
+    case Character::SecondaryStats::CRIT: {
+      return "CRIT";
+    }
+    case Character::SecondaryStats::CRITdmg: {
+      return "CRIT DMG";
+    }
+    case Character::SecondaryStats::HPregen: {
+      return "HP Regen";
+    }
+    case Character::SecondaryStats::MPregen: {
+      return "MP Regen";
+    }
+    case Character::SecondaryStats::MRES: {
+      return "MRES";
+    }
+    case Character::SecondaryStats::StatusRES: {
+      return "Status RES";
+    }
+    case Character::SecondaryStats::StatusDur: {
+      return "Status Dur";
+    }
+    case Character::SecondaryStats::LootBonus: {
+      return "Loot Bonus";
+    }
+    case Character::SecondaryStats::GoldBonus: {
+      return "Gold Bonus";
+    }
+    default: {
+      return "UNKNOWN";
+    }
+  }
+}
+
 void Character::showCharacter() const {
   std::cout << "===== Lv." << characterStats.at(Stat::LVL) << " " << name
             << " =====" << std::endl;
@@ -138,6 +204,17 @@ void Character::showCharacter() const {
                 << std::endl;
     }
     firstLine = false;
+  }
+  std::cout << std::endl;
+}
+
+void Character::showSecondaryStats() const {
+  std::cout << "===== Lv." << characterStats.at(Stat::LVL) << " " << name
+            << " =====" << std::endl;
+
+  for (const auto& entry : secondarycharacterStats) {
+    std::cout << " " << secondaryStatToString(entry.first) << ": "
+              << entry.second << std::endl;
   }
   std::cout << std::endl;
 }
@@ -182,4 +259,65 @@ void Character::useSkillPoint(Stat stat) {
     characterStats[stat] += 1;
     skillPointsUsed += 1;
   }
+}
+
+std::map<Character::SecondaryStats, double> Character::updateSecondaryStats() {
+  secondarycharacterStats[SecondaryStats::HP] =
+      5 * characterStats.at(Stat::END) + 2 * characterStats.at(Stat::STR);
+
+  secondarycharacterStats[SecondaryStats::MP] =
+      4 * characterStats.at(Stat::INT) + 3 * characterStats.at(Stat::WIS);
+
+  secondarycharacterStats[SecondaryStats::ATK] =
+      3 * characterStats.at(Stat::STR) + 2 * characterStats.at(Stat::DEX);
+
+  secondarycharacterStats[SecondaryStats::DEF] =
+      3 * characterStats.at(Stat::END) + 1 * characterStats.at(Stat::AGI);
+
+  secondarycharacterStats[SecondaryStats::MATK] =
+      3 * characterStats.at(Stat::INT) + 1 * characterStats.at(Stat::CHA);
+
+  secondarycharacterStats[SecondaryStats::MDEF] =
+      3 * characterStats.at(Stat::WIS) + 1 * characterStats.at(Stat::END);
+
+  secondarycharacterStats[SecondaryStats::SPD] =
+      3 * characterStats.at(Stat::AGI) + 2 * characterStats.at(Stat::DEX);
+
+  secondarycharacterStats[SecondaryStats::ACC] =
+      2 * characterStats.at(Stat::DEX) + 1 * characterStats.at(Stat::INT);
+
+  secondarycharacterStats[SecondaryStats::INIT] =
+      0.5 * characterStats.at(Stat::DEX) + 0.5 * characterStats.at(Stat::AGI);
+
+  secondarycharacterStats[SecondaryStats::DR] =
+      0.2 * characterStats.at(Stat::END) + 0.1 * characterStats.at(Stat::STR);
+
+  secondarycharacterStats[SecondaryStats::CRIT] =
+      2 * characterStats.at(Stat::DEX) + 1 * characterStats.at(Stat::LUK);
+
+  secondarycharacterStats[SecondaryStats::CRITdmg] =
+      0.3 * characterStats.at(Stat::CHA) + 0.3 * characterStats.at(Stat::DEX);
+
+  secondarycharacterStats[SecondaryStats::HPregen] =
+      0.2 * characterStats.at(Stat::END) + 0.3 * characterStats.at(Stat::WIS);
+
+  secondarycharacterStats[SecondaryStats::MPregen] =
+      0.3 * characterStats.at(Stat::INT) + 0.2 * characterStats.at(Stat::WIS);
+
+  secondarycharacterStats[SecondaryStats::MRES] =
+      0.4 * characterStats.at(Stat::WIS) + 0.2 * characterStats.at(Stat::INT);
+
+  secondarycharacterStats[SecondaryStats::StatusRES] =
+      0.3 * characterStats.at(Stat::CHA) + 0.2 * characterStats.at(Stat::END);
+
+  secondarycharacterStats[SecondaryStats::StatusDur] =
+      0.2 * characterStats.at(Stat::INT) + 0.3 * characterStats.at(Stat::CHA);
+
+  secondarycharacterStats[SecondaryStats::LootBonus] =
+      0.2 * characterStats.at(Stat::LUK) + 0.4 * characterStats.at(Stat::CHA);
+
+  secondarycharacterStats[SecondaryStats::GoldBonus] =
+      0.3 * characterStats.at(Stat::CHA) + 0.2 * characterStats.at(Stat::INT);
+
+  return secondarycharacterStats;
 }
