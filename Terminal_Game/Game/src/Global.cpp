@@ -22,3 +22,32 @@ int generateRandomNumber(int minValue, int maxValue) {
 
   return distribution(gen);
 }
+
+#ifdef _WIN32
+
+void clearScreen() { system("cls"); }
+
+#else
+
+void clearScreen() { system("clear"); }
+
+#endif
+
+void showImage(const std::string& keyword) {
+  if (keyword == "Tower RPG") {
+    std::string artTower_RPG = R"(
+
+ /$$$$$$$$                                                /$$$$$$$  /$$$$$$$   /$$$$$$ 
+|__  $$__/                                               | $$__  $$| $$__  $$ /$$__  $$
+   | $$  /$$$$$$  /$$  /$$  /$$  /$$$$$$   /$$$$$$       | $$  \ $$| $$  \ $$| $$  \__/
+   | $$ /$$__  $$| $$ | $$ | $$ /$$__  $$ /$$__  $$      | $$$$$$$/| $$$$$$$/| $$ /$$$$
+   | $$| $$  \ $$| $$ | $$ | $$| $$$$$$$$| $$  \__/      | $$__  $$| $$____/ | $$|_  $$
+   | $$| $$  | $$| $$ | $$ | $$| $$_____/| $$            | $$  \ $$| $$      | $$  \ $$
+   | $$|  $$$$$$/|  $$$$$/$$$$/|  $$$$$$$| $$            | $$  | $$| $$      |  $$$$$$/
+   |__/ \______/  \_____/\___/  \_______/|__/            |__/  |__/|__/       \______/ 
+                                                                                       
+                                                                                                                                                                            
+)";
+    std::cout << artTower_RPG << std::endl;
+  }
+}

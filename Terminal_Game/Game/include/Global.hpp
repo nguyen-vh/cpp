@@ -9,4 +9,8 @@ int getIntegerInput();
 
 int generateRandomNumber(int minValue, int maxValue);
 
+void clearScreen();
+
+void showImage(const std::string& keyword);
+
 #endif

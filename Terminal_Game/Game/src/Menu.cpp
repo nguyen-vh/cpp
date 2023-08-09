@@ -3,11 +3,32 @@
 #include "../include/Character.hpp"
 #include "../include/Global.hpp"
 
+//* Game Loop
+void Menu::GameLoop() { displayLoadingScreen(); }
+
+//* >Loading Screen
+void Menu::displayLoadingScreen() {
+  clearScreen();
+  showImage("Tower RPG");
+
+  std::string message =
+      "                             Press Enter to continue... ";
+
+  for (char c : message) {
+    std::cout << c << std::flush;
+    std::this_thread::sleep_for(std::chrono::milliseconds(70));
+  }
+
+  std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+
+  displayRPG_GameMenu();
+}
+
 //* >Starting Menu
 void Menu::displayRPG_GameMenu() {
   while (true) {
-    std::cout << std::endl;
-    std::cout << "===== RPG Game =====\n";
+    clearScreen();
+    std::cout << "===== Tower RPG =====\n";
     std::cout << "[1] Start Game\n";
     std::cout << "[2] Load Game\n";
     std::cout << "[3] Settings\n";
@@ -43,7 +64,7 @@ void Menu::displayRPG_GameMenu() {
 
 //  >Start Game
 void Menu::displayStartGameMenu() {
-  std::cout << std::endl;
+  clearScreen();
   std::cout << "===== Start Game =====\n" << std::endl;
   std::cout << "Enter Chiefname: \n";
   std::string chiefname{};
@@ -53,7 +74,7 @@ void Menu::displayStartGameMenu() {
 
 //  >Load Game
 void Menu::displayLoadGameMenu() {
-  std::cout << std::endl;
+  clearScreen();
   std::cout << "===== Load Game =====\n" << std::endl;
   std::cout << "Enter Savefile: \n";
   std::string savefile{};
@@ -64,7 +85,7 @@ void Menu::displayLoadGameMenu() {
 //  >Settings
 void Menu::displaySettingsMenu() {
   while (true) {
-    std::cout << std::endl;
+    clearScreen();
     std::cout << "===== Settings =====\n";
     std::cout << "[0] Go Back\n";
     std::cout << "[1] Set Easy\n";
@@ -106,7 +127,7 @@ void Menu::displayMainMenu() {
   Currency playerCurrency;
 
   while (true) {
-    std::cout << std::endl;
+    clearScreen();
     std::cout << "===== Menu =====\n";
     std::cout << "[1] Raiders\n";
     std::cout << "[2] Town\n";
@@ -157,7 +178,7 @@ void Menu::displayMainMenu() {
 void Menu::displayRaidersMenu(std::vector<Character>& characters,
                               Currency& playerCurrency) {
   while (true) {
-    std::cout << std::endl;
+    clearScreen();
     std::cout << "===== Raiders =====" << std::endl;
     std::cout << "[0] Go Back\n";
     std::cout << "[1] Show Raiders\n";
@@ -190,12 +211,11 @@ void Menu::displayRaidersMenu(std::vector<Character>& characters,
 //  -Raiders >Show Raiders
 void Menu::displayShowRaidersMenu(std::vector<Character>& characters) {
   while (true) {
-    std::cout << std::endl;
+    clearScreen();
     std::cout << "===== Show Raiders =====\n";
-    std::cout << "[0] Go Back\n";
-
     if (!characters.empty()) {
       int index = 1;
+      std::cout << "[0] Go Back\n";
       for (const Character& character : characters) {
         std::cout << "[" << index << "] " << character.getName() << std::endl;
         index++;
@@ -216,7 +236,7 @@ void Menu::displayShowRaidersMenu(std::vector<Character>& characters) {
 
     if (option > 0) {
       while (true) {
-        std::cout << std::endl;
+        clearScreen();
         characters[characterNum - 1].showCharacter();
         std::cout << "Skill Points: "
                   << characters[characterNum - 1].getSkillPoints() << "\n";
@@ -230,7 +250,7 @@ void Menu::displayShowRaidersMenu(std::vector<Character>& characters) {
         std::cout << "[6] +1 WIS\n";
         std::cout << "[7] +1 CHA\n";
         std::cout << "[8] +1 LUK\n";
-        std::cout << "[9] Open Stats\n";
+        std::cout << "[9] 2nd Page\n";
 
         int option = getIntegerInput();
 
@@ -320,8 +340,7 @@ void Menu::displayShowRaidersMenu(std::vector<Character>& characters) {
           }
           case 9: {
             while (true) {
-              std::cout << std::endl;
-
+              clearScreen();
               std::cout << "===== Secondary Stats =====\n";
               characters[characterNum - 1].updateSecondaryStats();
               characters[characterNum - 1].showSecondaryStats();
@@ -352,7 +371,7 @@ void Menu::displayShowRaidersMenu(std::vector<Character>& characters) {
 void Menu::displayRecruitRaiderMenu(std::vector<Character>& characters,
                                     Currency& playerCurrency) {
   while (true) {
-    std::cout << std::endl;
+    clearScreen();
     std::cout << "===== Recruit Raider =====" << std::endl;
     std::cout << "Balance: " << playerCurrency.GetGold() << " Gold "
               << playerCurrency.GetSilver() << " Silver\n"
@@ -400,6 +419,7 @@ void Menu::displayRecruitRaiderTypeMenu(std::vector<Character>& characters,
     std::cout << std::endl;
     switch (type) {
       case Character::CharacterType::Weak: {
+        clearScreen();
         std::cout << "===== Recruit Raider(Weak) =====\n";
 
         if (playerCurrency.GetGold() >= 10) {
@@ -426,6 +446,7 @@ void Menu::displayRecruitRaiderTypeMenu(std::vector<Character>& characters,
       }
 
       case Character::CharacterType::Average: {
+        clearScreen();
         std::cout << "===== Recruit Raider(Average) =====\n";
 
         if (playerCurrency.GetGold() >= 35) {
@@ -452,6 +473,7 @@ void Menu::displayRecruitRaiderTypeMenu(std::vector<Character>& characters,
       }
 
       case Character::CharacterType::Strong: {
+        clearScreen();
         std::cout << "===== Recruit Raider(Strong) =====\n";
 
         if (playerCurrency.GetGold() >= 100) {
@@ -486,7 +508,7 @@ void Menu::displayRecruitRaiderTypeMenu(std::vector<Character>& characters,
 //* >Town
 void Menu::displayTownMenu(const Currency& playerCurrency) {
   while (true) {
-    std::cout << std::endl;
+    clearScreen();
     std::cout << "===== Town =====" << std::endl;
     std::cout << "Balance: " << playerCurrency.GetGold() << " Gold "
               << playerCurrency.GetSilver() << " Silver\n"
@@ -518,7 +540,7 @@ void Menu::displayTownMenu(const Currency& playerCurrency) {
 //* >Tower
 void Menu::displayTowerMenu() {
   while (true) {
-    std::cout << std::endl;
+    clearScreen();
     std::cout << "===== Tower =====" << std::endl;
     std::cout << "[0] Go Back\n";
     std::cout << "[1] -\n";
@@ -547,7 +569,7 @@ void Menu::displayTowerMenu() {
 //* >Inventory
 void Menu::displayInventoryMenu() {
   while (true) {
-    std::cout << std::endl;
+    clearScreen();
     std::cout << "===== Inventory =====" << std::endl;
     std::cout << "[0] Go Back\n";
     std::cout << "[1] -\n";
@@ -576,7 +598,7 @@ void Menu::displayInventoryMenu() {
 //* >Save/Load
 void Menu::displaySaveLoadMenu() {
   while (true) {
-    std::cout << std::endl;
+    clearScreen();
     std::cout << "===== Save/Load =====" << std::endl;
     std::cout << "[0] Go Back\n";
     std::cout << "[1] -\n";
@@ -604,7 +626,7 @@ void Menu::displaySaveLoadMenu() {
 
 //* >Exit Game
 void Menu::displayExitGameMenu() {
-  std::cout << std::endl;
+  clearScreen();
   std::cout << "===== Exit Game =====\n" << std::endl;
   std::cout << "Are you sure you want to leave?\n" << std::endl;
   std::cout << "       y / n         \n";

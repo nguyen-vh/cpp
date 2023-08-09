@@ -2,8 +2,11 @@
 #define MENU_HPP
 
 // #include <cstdlib>
+#include <chrono>
+#include <cstdlib>
 #include <fstream>
 #include <iostream>
+#include <thread>
 #include <vector>
 
 #include "Character.hpp"
@@ -11,6 +14,12 @@
 
 class Menu {
  public:
+  // Game Loop
+  static void GameLoop();
+
+  // Loading Screen
+  static void displayLoadingScreen();
+
   // Start Menu
   static void displayRPG_GameMenu();
   static void displayStartGameMenu();
