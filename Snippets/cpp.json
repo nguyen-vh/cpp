@@ -71,11 +71,40 @@
 		],
 		"description": "Macro for Windows/ Unix specific code"
 	},
-	"": {
+	"Class": {
 		"prefix": [
-			""
+			"class-template"
 		],
-		"body": [],
-		"description": ""
+		"body": [
+			"class ${1:Name}",
+			"{",
+			"public:",
+			"${1:Name}();\n",
+			"~${1:Name}();\n",
+			"private:\n\n",
+			"};"
+		],
+		"description": "Class"
+	},
+	".hpp": {
+		"prefix": [
+			"hpp-template"
+		],
+		"body": [
+			
+			"#ifndef %{2:NAME}_HPP",
+			"#define ${2:NAME}_HPP\n",
+			"#include ../include/stdafx.hpp",
+			"// Own Headers\n\n",
+			"class ${1:Name}",
+			"{",
+			"public:",
+			"${1:Name}();\n",
+			"~${1:Name}();\n",
+			"private:\n\n",
+			"};\n\n\n",
+			"#endif"
+		],
+		"description": "Template for hpp files with PCH"
 	}
 }
