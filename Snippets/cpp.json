@@ -92,7 +92,7 @@
 		],
 		"body": [
 			
-			"#ifndef %{2:NAME}_HPP",
+			"#ifndef ${2:NAME}_HPP",
 			"#define ${2:NAME}_HPP\n",
 			"#include ../include/stdafx.hpp",
 			"// Own Headers\n\n",
@@ -100,7 +100,7 @@
 			"{",
 			"public:",
 			"${1:Name}();\n",
-			"~${1:Name}();\n",
+			"virtual ~${1:Name}();\n",
 			"private:\n\n",
 			"};\n\n\n",
 			"#endif"
