@@ -91,11 +91,11 @@
 			"hpp-template"
 		],
 		"body": [
-			
+			"#pragma once\n",
 			"#ifndef ${2:NAME}_HPP",
 			"#define ${2:NAME}_HPP\n",
-			"#include ../include/stdafx.hpp",
-			"// Own Headers\n\n",
+			"#include ../include/stdafx.hpp\n",
+			"//* \n",
 			"class ${1:Name}",
 			"{",
 			"public:",
